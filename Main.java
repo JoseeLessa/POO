@@ -18,6 +18,8 @@ public class Main {
                 case 2:
                     // chamar metodo com menu de reservas
                     break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
             }
             op = e.menu();
         }
