@@ -71,6 +71,7 @@ public class Horario {
 
     // ================================================
     // toString
+    @Override
     public String toString() {
         return String.format("%02d:%02d", this.hora, this.min);
     }

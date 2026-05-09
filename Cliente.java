@@ -6,6 +6,13 @@ public class Cliente {
 
     // ================================================
     // Construtor
+    /**
+     * Construtor da classe Usuários, que recebe o nome, cpf, email e a senha a serem cadastradas.
+     * @param nome String com o nome do usuário.
+     * @param cpf String com o CPF do usuário.
+     * @param email String com o e-mail do usuário.
+     * @param senha String com senha do usuário a ser cadastrado
+     */
     public Cliente(String nome, String cpf, String email, String senha) {
         this.setNome(nome);
         this.setCpf(cpf);
@@ -84,7 +91,8 @@ public class Cliente {
 
     // ================================================
     // toString
+    @Override
     public String toString() {
-        return this.nome + " (" + this.email + " - CPF: " + this.cpf + ")";
+        return String.format("%s (%s - CPF: %s)", this.nome, this.email, this.cpf);
     }
 }
