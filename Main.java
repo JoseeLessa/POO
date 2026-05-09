@@ -5,6 +5,7 @@
 
 public class Main {
     public static void main(String[] args) {
+        
         Data d = new Data(8,5,2026);
         System.out.println(d);
 

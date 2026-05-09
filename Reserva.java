@@ -16,9 +16,14 @@ public class Reserva {
      * @param espaco Espaco a ser utilizado
      * @param cliente Cliente que fez a reserva
      */
-    Reserva(){
-
+    Reserva(Data data, Horario inicio, Horario fim, Espaco espaco, Cliente cliente) {
+        this.data = data;
+        this.inicio = inicio;
+        this.fim = fim;
+        this.espaco = espaco;
+        this.cliente = cliente;
     }
+    
     // ================================================
     // Outros métodos
     /**
@@ -26,7 +31,7 @@ public class Reserva {
      * @return Preço da reserva
      */
     public double preco(){
-        return this.espaco.getValorHora() * (this.fim.getHora() - this.inicio.getHora()) + this.espaco.getTaxaLimpeza();
+        return this.getEspaco().preco(this.getInicio(), this.getFim());
     }
 
     /**

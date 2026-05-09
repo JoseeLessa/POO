@@ -2,12 +2,18 @@ import java.util.ArrayList;
 
 public class Espaco {
     protected String descricao;
-    protected double valorHora;
-    protected double taxaLimpeza;
+    static protected double valorHora;
+    static protected double taxaLimpeza;
     protected ArrayList<Reserva> reservas;
 
     // ================================================
     // Construtor
+    /**
+     * Construtor da classe Espaco, recebe a descrição do espaço, o valor por hora e a taxa de limpeza.
+     * @param descricao String contendo a descrição do espaço
+     * @param valorHora Double contendo o valor por hora do espaço
+     * @param taxaLimpeza Double contendo a taxa de limpeza do espaço
+     */
     public Espaco(String descricao, double valorHora, double taxaLimpeza) {
         this.descricao = descricao;
         this.valorHora = valorHora;
@@ -35,15 +41,32 @@ public class Espaco {
     }
 
     /**
-    * Adiciona uma reserva à lista de reservas do espaço.
-    * @param r Reserva a ser adicionada
-    */
+     * Adiciona uma reserva à lista de reservas do espaço.
+     * @param r Reserva a ser adicionada no ArrayList de reservas
+     */
     public void addReserva(Reserva r) {
         this.reservas.add(r);
     }
 
+    /**
+     * Calcula o preço do espaço para o determinado horário de início e fim.
+     * @param inicio Representa o horário de início da reserva
+     * @param fim Representa o horário de fim da reserva
+     * @return Double contendo o preço do espaço para o determinado horário de início e fim
+     */
     public double preco(Horario inicio, Horario fim) {
-        return this.valorHora * (fim.getHora() - inicio.getHora()) + this.taxaLimpeza;
+        // Gambiarra para arredondar a hora cobradas caso a hora seja 
+        // a mesma ou, ex: (18h até 19h 20min -> 2 horas cobradas).
+        // Deve ter jeito melhor de fazer, mas é o que encaixa na regra do negócio.
+        return this.valorHora * (fim.getHora() - inicio.getHora() + (fim.getMinuto() > 0 ? 1 : 0)) + this.taxaLimpeza;
+    }
+
+    /**
+     * Verifica se o espaço possui adicional extra (projetor ou monitor).
+     * @return Boolean indicando se o espaço possui ou não adicional extra
+     */
+    public boolean possuiAdicionalExtra() {
+        return true;
     }
 
     // ================================================

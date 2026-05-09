@@ -1,7 +1,12 @@
+
 import java.util.ArrayList;
 
 public class Sistema {
     private ArrayList<Cliente> clientes = new ArrayList<>();
+    private double valorHora;
+    private double taxaLimpeza;
+    private double precoProjetor;
+    private double precoMonitor;
 
     public Sistema(double valorHora, double taxaLimpeza, double precoProjetor, double precoMonitor) {
         this.clientes = new ArrayList<>();
