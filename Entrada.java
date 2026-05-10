@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 /**
  * Classe com as rotinas de entrada e saída do projeto
- * @author Hilario Seibel Junior e <seu nome aqui>
+ * @author Hilario Seibel Junior e José Otávio de Souza Lessa
  */
 public class Entrada {
     public Scanner input;
@@ -29,6 +29,8 @@ public class Entrada {
         }
     }
 
+    // ================================================
+    // Métodos de leitura
     /**
      * Faz a leitura de uma linha inteira
      * Ignora linhas começando com #, que vão indicar comentários no arquivo de entrada:
@@ -65,6 +67,75 @@ public class Entrada {
         // Imprime uma mensagem ao usuário, lê uma linha contendo um double e retorna este double
         String linha = this.lerLinha(msg);
         return Double.parseDouble(linha);
+    }
+
+    /**
+     * Faz a leitura de dados para criar uma Data.
+     * @param s Objeto da classe Sistema
+     * @return new Data
+     */
+    public Data lerData(Sistema s) {
+        int dia = this.lerInteiro("Dia: ");
+        int mes = this.lerInteiro("Mês: ");
+        int ano = this.lerInteiro("Ano: ");
+        
+        return new Data(dia, mes, ano);
+    }
+
+    /**
+     * Faz a leitura de dados para criar um Horario.
+     * @param s Objeto da classe Sistema
+     * @return new Horario
+     */
+    public Horario lerHorario(Sistema s) {
+        int hora = this.lerInteiro("Hora: ");
+        int minutos = this.lerInteiro("Minuto: ");
+
+        return new Horario(hora, minutos);
+    }
+
+    /**
+     * Faz a leitura do tipo do espaço que o cliente desejar reservar.
+     * @param s
+     * @return String contendo 's' para sala ou 'e' para estação de trabalho
+     */
+    public String lerTipo(Sistema s) {
+        String tipo = this.lerLinha("Deseja reservar uma sala ou estação de trabalho? (s/e): ");
+        while (!tipo.equals("s") || !tipo.equals("e")) {
+            tipo = this.lerLinha("ERRO! Insira uma opção válida (s/e): ");
+        }
+        return tipo;
+    }
+
+    /**
+     * Faz a leitura se o cliente quer uma reseva com extra. 
+     * Não há Texto para o tipo da sala, apenas as opções.
+     * @param s Objeto da classe Sistema
+     * @return booleano contendo a resposta
+     */
+    public boolean lerExtra(Sistema s) {
+        String extra = this.lerLinha("(s/n): ");
+        while (!extra.equals("s") || !extra.equals("n")) {
+            extra = this.lerLinha("ERRO! Insira uma opção válida (s/n): ");
+        }
+        return extra.equals("s");
+    }
+
+    // ================================================
+    // Métodos de menu
+    /**
+     * Faz a leitura dos dados basicos do sistema, crie um objeto Sistema com os dados lidos
+     * e retorna este objeto.
+     * @return Novo objeto Sistema com os dados lidos
+     */
+    public Sistema criarSistema() {
+        System.out.println("Iniciando o sistema...");
+        double valorHora = this.lerDouble("Digite o valor por hora para usar um espaço: R$ ");
+        double taxaLimpeza = this.lerDouble("Digite a taxa de limpeza: R$ ");
+        double precoProjetor = this.lerDouble("Digite o valor extra para usar o projetor: R$ ");
+        double precoMonitor = this.lerDouble("Digite o valor para usar o monitor extra: R$ ");
+
+        return new Sistema(valorHora, taxaLimpeza, precoProjetor, precoMonitor);
     }
 
     /**
@@ -115,35 +186,82 @@ public class Entrada {
                 break;
             case 2:
                 // chamar metodo para listar salas
+                this.listarSalas(s);
                 break;
             case 3:
                 // chamar metodo para listar estacoes
+                this.listarEstacoes(s);
                 break;
             case 4:
                 this.cadastrarCliente(s);
                 break;
             case 5:
                 // chamar metodo para cadastrar sala
+                this.cadastrarSala(s);
                 break;
             case 6:
                 // chamar metodo para cadastrar estacao
+                this.cadastrarEstacao(s);
                 break;
         }
     }
 
-    /**
-     * Faz a leitura dos dados basicos do sistema, crie um objeto Sistema com os dados lidos
-     * e retorna este objeto.
-     * @return Novo objeto Sistema com os dados lidos
-     */
-    public Sistema criarSistema() {
-        System.out.println("Iniciando o sistema...");
-        double valorHora = this.lerDouble("Digite o valor por hora para usar um espaço: R$ ");
-        double taxaLimpeza = this.lerDouble("Digite a taxa de limpeza: R$ ");
-        double precoProjetor = this.lerDouble("Digite o valor extra para usar o projetor: R$ ");
-        double precoMonitor = this.lerDouble("Digite o valor para usar o monitor extra: R$ ");
+    
 
-        return new Sistema(valorHora, taxaLimpeza, precoProjetor, precoMonitor);
+    // ================================================
+    // Métodos de print de ArrayList
+    /**
+     * Lista todos os clientes cadastrados
+     * @param s: Objeto da classe Sistema
+     */
+    public void listarClientes(Sistema s) {
+        System.out.println("*********************************");
+        ArrayList<Cliente> clientes = s.getClientes();
+
+        if (clientes.isEmpty()) {
+            System.out.println("Nenhum cliente cadastrado.");
+        } else {
+            System.out.println("Clientes cadastrados:");
+            for (Cliente c : clientes) {
+                System.out.println(c);
+            }
+        }
+    }
+
+    /**
+     * Lista todos os clientes cadastrados
+     * @param s: Objeto da classe Sistema
+     */
+    public void listarSalas(Sistema s) {
+        System.out.println("*********************************");
+        ArrayList<Espaco> salas = s.getSalas();
+
+        if (salas.isEmpty()) {
+            System.out.println("Nenhuma sala cadastrada.");
+        } else {
+            System.out.println("Salas cadastradas:");
+            for (Espaco e : salas) {
+                System.out.println(e);
+            }
+        }
+    }
+
+    /**
+     * Lista todos os clientes cadastrados
+     * @param s: Objeto da classe Sistema
+     */
+    public void listarEstacoes(Sistema s) {
+        System.out.println("*********************************");
+        ArrayList<Espaco> estacoes = s.getEstacoes();
+
+        if (estacoes.isEmpty()) {
+            System.out.println("Nenhuma estação cadastrada.");
+        } else {
+            System.out.println("Estações cadastradas:");
+            for (Espaco e : estacoes) {
+                System.out.println(e);
+            }
+        }
     }
 
     /**
@@ -156,8 +274,7 @@ public class Entrada {
 
         if (clientes.isEmpty()) {
             System.out.println("Nenhum cliente cadastrado.");
-        }
-        else {
+        } else {
             System.out.println("Clientes cadastrados:");
             for (Cliente c : clientes) {
                 System.out.println(c);
@@ -165,6 +282,12 @@ public class Entrada {
         }
     }
 
+    // ================================================
+    // Métodos de cadastro
+    /**
+     * Cadastra novo cliente no sistema.
+     * @param s: Objeto da classe Sistema
+     */
     public void cadastrarCliente(Sistema s) {
         this.listarClientes(s);
 
@@ -177,11 +300,49 @@ public class Entrada {
         if (s.getCliente(cpf) == null) {
             Cliente cli = new Cliente(nome, cpf, email, senha);
             s.cadastrar(cli);
-        }
-        else {
+        } else {
             System.out.println("CPF já cadastrado. Cliente não inserido.");
+        } 
+    }
+
+    /**
+     * Cadastra nova sala no sistema.
+     * @param s: Objeto da classe Sistema
+     */
+    public void cadastrarSala(Sistema s) {
+        this.listarSalas(s);
+
+        System.out.println("Cadastrando sala.");
+        String desc = this.lerLinha("Digite o nome da sala: ");
+        String extra = this.lerLinha("Possui projetor? (s/n): ");
+
+        if (s.getSala(desc) == null) {
+            Sala sala = new Sala(desc, extra);
+            s.cadastrar(sala);
+        } else {
+            System.out.println("Sala já existe. Sala não inserida.");
         }
     }
 
+    /**
+     * Cadastra nova estação no sistema.
+     * @param s: Objeto da classe Sistema
+     */
+    public void cadastrarEstacao(Sistema s) {
+        this.listarEstacoes(s);
 
+        System.out.println("Cadastrando estação.");
+        String desc = this.lerLinha("Digite o nome da estação: ");
+        String extra = this.lerLinha("Possui monitor extra? (s/n): ");
+
+        if (s.getEstacao(desc) == null) {
+            Estacao estacao = new Estacao(desc, extra);
+            s.cadastrar(estacao);
+        } else {
+            System.out.println("Estação já existe. Estação não inserida.");
+        }
+    }
+
+    // ================================================
+    // Métodos de Reservas
 }

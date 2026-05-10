@@ -11,13 +11,9 @@ public class Espaco {
     /**
      * Construtor da classe Espaco, recebe a descrição do espaço, o valor por hora e a taxa de limpeza.
      * @param descricao String contendo a descrição do espaço
-     * @param valorHora Double contendo o valor por hora do espaço
-     * @param taxaLimpeza Double contendo a taxa de limpeza do espaço
      */
-    public Espaco(String descricao, double valorHora, double taxaLimpeza) {
+    public Espaco(String descricao) {
         this.descricao = descricao;
-        this.valorHora = valorHora;
-        this.taxaLimpeza = taxaLimpeza;
         this.reservas = new ArrayList<>();
     }
 
@@ -143,6 +139,10 @@ public class Espaco {
      */
     public void setTaxaLimpeza(double taxaLimpeza) {
         this.taxaLimpeza = taxaLimpeza;
+    }
+
+    public ArrayList<Reserva> getReservas(){
+        return this.reservas;
     }
 
     // ================================================

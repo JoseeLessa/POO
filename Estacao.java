@@ -7,12 +7,10 @@ public class Estacao extends Espaco {
     /**
      * Construtor da classe Estacao, recebe a descrição do espaço, o valor por hora, a taxa de limpeza e se possui monitor extra.
      * @param descricao String contendo a descrição do espaço
-     * @param valorHora Double contendo o valor por hora do espaço
-     * @param taxaLimpeza Double contendo a taxa de limpeza do espaço
      * @param monitorExtra Boolean indicando se a estação possui monitor extra ou não
      */
-    Estacao(String descricao, double valorHora, double taxaLimpeza, boolean monitorExtra) {
-        super(descricao, valorHora, taxaLimpeza);
+    Estacao(String descricao, boolean monitorExtra) {
+        super(descricao);
         this.monitorExtra = monitorExtra;
     }
 

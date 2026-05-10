@@ -132,7 +132,7 @@ public class Reserva {
                 "* Local: " + this.espaco + "\n" +
                 "* Data: " + this.data + "\n" +
                 "* Horário: " + this.inicio + "\n" +
-                "* Cliente: " + this.cliente.getNome() + "\n" +
+                "* Cliente: " + this.cliente + "\n" +
                 "* Valor: R$ " + this.printPreco());
     }
 }
