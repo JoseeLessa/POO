@@ -82,6 +82,6 @@ public class Data {
     // toString
     @Override
     public String toString() {
-        return String.format("%02d/%02d/%04d", this.dia, this.mes, this.ano);
+        return String.format("%02d/%02d/%04d", this.getDia(), this.getMes(), this.getAno());
     }
 }

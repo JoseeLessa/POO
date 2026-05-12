@@ -25,6 +25,16 @@ public class Sistema {
 
     // ================================================
     // Outros Métodos
+    /**
+     * Realiza uma reserva de acordo com os parâmetros dados, verificando a disponibilidade do espaço e do horário.
+     * @param tipo String contendo o tipo de espaço a ser reservado (s/e)
+     * @param data Data da reserva
+     * @param inicio Horario de inicio da reserva
+     * @param fim Horario de fim da reserva
+     * @param cliente Cliente que está fazendo a reserva
+     * @param extra boolean contendo se o espaço precisa de extra
+     * @return boolean mostrando se a reserva foi ou não realizada
+     */
     public boolean reservar(String tipo, Data data, Horario inicio, Horario fim, Cliente cliente, boolean extra) {
         if (tipo.equals("e")) {
             for (Espaco e: estacoes) {
@@ -47,6 +57,14 @@ public class Sistema {
         return false;
     }
 
+    /**
+     * Realiza uma reserva de acordo com os parâmetros dados, verificando a disponibilidade do espaço.
+     * @param tipo String contendo o tipo de espaço a ser reservado (s/e)
+     * @param data Data da reserva
+     * @param cliente Cliente que está fazendo a reserva
+     * @param extra boolean contendo se o espaço precisa de extra
+     * @return boolean mostrando se a reserva foi ou não realizada
+     */
     public boolean reservar(String tipo, Data data, Cliente cliente, boolean extra) {
         Horario inicio = new Horario(8,0);
         Horario fim = new Horario(22,0);
@@ -54,15 +72,25 @@ public class Sistema {
         return reservar(tipo, data, inicio, fim, cliente, extra);
     }
 
+    /**
+     * Realiza uma reserva de acordo com os parâmetros dados, verificando a disponibilidade do espaço e do turno.
+     * @param tipo String contendo o tipo de espaço a ser reservado (s/e)
+     * @param data Data da reserva
+     * @param turno String contendo o turno da reserva (m/v/n)
+     * @param cliente Cliente que está fazendo a reserva
+     * @param extra boolean contendo se o espaço precisa de extra
+     * @return boolean mostrando se a reserva foi ou não realizada
+     */
     public boolean reservar(String tipo, Data data, String turno, Cliente cliente, boolean extra) {
-        int hIni, hFim;
-        if (turno.equals("matutino")){
+        int hIni = 0;
+        int hFim = 0;
+        if (turno.equals("m")){
             hIni = 8;
             hFim = 12;
-        } else if (turno.equals("vespertino")) {
+        } else if (turno.equals("v")) {
             hIni = 13;
             hFim = 17;
-        } else if (turno.equals("noturno")) {
+        } else if (turno.equals("n")) {
             hIni = 18;
             hFim = 22;
         }
@@ -79,10 +107,10 @@ public class Sistema {
      * @param desc nome da sala a ser procurada
      * @return retorna a sala caso ache, ou null caso não ache
      */
-    public Sala getSala(String desc) {
-        for (Espaco e : this.salas) {
+    public Espaco getSala(String desc) {
+        for (Espaco e : this.getSalas()) {
             String eDesc = e.getDescricao();
-            if (desc.equal(eDesc)) return e;
+            if (desc.equals(eDesc)) return e;
         }
         return null;
     }
@@ -92,10 +120,10 @@ public class Sistema {
      * @param desc nome da estação a ser procurada
      * @return retorna a estação caso ache, ou null caso não ache
      */
-    public Estacao getEstacao(String desc) {
+    public Espaco getEstacao(String desc) {
         for (Espaco e : this.estacoes) {
             String eDesc = e.getDescricao();
-            if (desc.equal(eDesc)) return e;
+            if (desc.equals(eDesc)) return e;
         }
         return null;
     }

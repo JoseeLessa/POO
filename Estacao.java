@@ -19,7 +19,7 @@ public class Estacao extends Espaco {
     
     @Override
     public double preco(Horario inicio, Horario fim) {
-        return super.preco(inicio, fim) + (this.possuiAdicionalExtra() ? this.getPrecoMonitor() : 0);
+        return super.preco(inicio, fim) + (this.possuiAdicionalExtra() ? getPrecoMonitor() : 0);
     }
 
     @Override
@@ -29,20 +29,36 @@ public class Estacao extends Espaco {
 
     // ================================================
     // Getters e setters
-    public boolean getMonitorExtra() {
+    /**
+     * Retorna se a estação possui monitor extra.
+     * @return boolean contendo a informação se possui monitor extra
+     */
+    public boolean getMonitor() {
         return monitorExtra;
     }
 
-    public void setMonitorExtra(boolean monitorExtra) {
-        this.monitorExtra = monitorExtra;
+    /**
+     * Define se a estacao possui monitor extra.
+     * @param monitor boolean contendo a informação se a estação deve ter monitor extra
+     */
+    public void setMonitor(boolean monitor) {
+        this.monitorExtra = monitor;
     }
 
-    public double getPrecoMonitor() {
-        return this.precoMonitor;
+    /**
+     * Retorna o valor do monitor extra da classe Estacao.
+     * @return double com o valor do Monitor extra
+     */
+    static public double getPrecoMonitor() {
+        return Estacao.precoMonitor;
     }
 
-    public void setPrecoMonitor(double precoMonitor) {
-        this.precoMonitor = precoMonitor;
+    /**
+     * Define o valor fixo do monitor extra na extação.
+     * @param precoMonitor double contendo o valor do monitor extra.
+     */
+    static public void setPrecoMonitor(double precoMonitor) {
+        Estacao.precoMonitor = precoMonitor;
     }
 
 

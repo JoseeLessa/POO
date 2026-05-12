@@ -19,7 +19,7 @@ public class Sala extends Espaco {
     
     @Override
     public double preco(Horario inicio, Horario fim) {
-        return super.preco(inicio, fim) + (this.possuiAdicionalExtra() ? this.getPrecoProjetor() : 0);
+        return 4*super.preco(inicio, fim) + (this.possuiAdicionalExtra() ? getPrecoProjetor() : 0);
     }
 
     @Override
@@ -29,20 +29,36 @@ public class Sala extends Espaco {
 
     // ================================================
     // Getters e setters
+    /**
+     * Retorna se a sala possui projetor extra.
+     * @return boolean contendo a informação se possui projetor extra
+     */
     public boolean getProjetor() {
         return projetor;
     }
 
+    /**
+     * Define se a sala possui projetor extra.
+     * @param projetor boolean contendo a informação se a sala deve ter projetor extra
+     */
     public void setProjetor(boolean projetor) {
         this.projetor = projetor;
     }
 
-    public double getPrecoProjetor() {
-        return this.precoProjetor;
+    /**
+     * Retorna o valor do projetor extra da classe Sala.
+     * @return double com o valor do projetor extra
+     */
+    static public double getPrecoProjetor() {
+        return Sala.precoProjetor;
     }
 
-    public void setPrecoProjetor(double precoProjetor) {
-        this.precoProjetor = precoProjetor;
+    /**
+     * Define o valor fixo do projetor extra por sala.
+     * @param precoProjetor double contendo o valor do projetor extra.
+     */
+    static public void setPrecoProjetor(double precoProjetor) {
+        Sala.precoProjetor = precoProjetor;
     }
 
 

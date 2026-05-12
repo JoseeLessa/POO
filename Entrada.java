@@ -21,7 +21,7 @@ public class Entrada {
     public Entrada() {
         try {
             // Se houver um arquivo input.txt, o Scanner vai ler dele.
-            this.input = new Scanner(new FileInputStream("input2.txt")).useLocale(Locale.US);
+            this.input = new Scanner(new FileInputStream("POO\\input.txt")).useLocale(Locale.US);
         } catch (FileNotFoundException e) {
             // Caso contrário, vai ler do teclado.
             // Locale.US para que o Java sempre leia double com "pontos" ao invés de "vírgulas"
@@ -101,7 +101,7 @@ public class Entrada {
      */
     public String lerTipo(Sistema s) {
         String tipo = this.lerLinha("Deseja reservar uma sala ou estação de trabalho? (s/e): ");
-        while (!tipo.equals("s") || !tipo.equals("e")) {
+        while (!tipo.equals("s") && !tipo.equals("e")) {
             tipo = this.lerLinha("ERRO! Insira uma opção válida (s/e): ");
         }
         return tipo;
@@ -115,7 +115,7 @@ public class Entrada {
      */
     public boolean lerExtra(Sistema s) {
         String extra = this.lerLinha("(s/n): ");
-        while (!extra.equals("s") || !extra.equals("n")) {
+        while (!extra.equals("s") && !extra.equals("n")) {
             extra = this.lerLinha("ERRO! Insira uma opção válida (s/n): ");
         }
         return extra.equals("s");
@@ -140,7 +140,7 @@ public class Entrada {
      */
     public String lerTurno(Sistema s) {
         String turno = this.lerLinha("Escolha um turno (m/v/n): ");
-        while (!turno.equals("m") || !turno.equals("v") || !turno.equals("n")) {
+        while (!turno.equals("m") && !turno.equals("v") && !turno.equals("n")) {
             turno = this.lerLinha("ERRO! Insira uma opção válida (m/v/n): ");
         }
         return turno;
@@ -514,15 +514,18 @@ public class Entrada {
             System.out.print("Deseja reservar estação com monitor extra?");
         }
         boolean extra = this.lerExtra(s);
+        System.out.println("Escolha o horário de início da reserva:");
         Data data = this.lerData(s);
-        String turno = this.lerTurno(s);
+        Horario inicio = this.lerHorario(s);
+        System.out.println("Escolha o horário de fim da reserva:");
+        Horario fim = this.lerHorario(s);
         Cliente cliente = this.lerCliente(s);
 
         if (cliente != null) {
-            if (s.reservar(tipo, data, turno, cliente, extra)) {
+            if (s.reservar(tipo, data, inicio, fim, cliente, extra)) {
                 System.out.println("Reserva realizada com sucesso!");
             } else {
-                System.out.println("Não foi possível realizar a reserva. Tente novamente em outra data ou turno.");
+                System.out.println("Não foi possível realizar a reserva. Tente novamente em outro horário ou data.");
             }
         } else {
             System.out.println("Cliente não encontrado. Tente novamente.");
