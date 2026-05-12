@@ -133,6 +133,19 @@ public class Entrada {
         return s.getCliente(cpf);
     }
 
+    /**
+     * Faz a leitura de um turno entre matutino, vespertino ou noturno.
+     * @param s Objeto da classe Sistema
+     * @return string contendo o turno escolhido (m/v/n) 
+     */
+    public String lerTurno(Sistema s) {
+        String turno = this.lerLinha("Escolha um turno (m/v/n): ");
+        while (!turno.equals("m") || !turno.equals("v") || !turno.equals("n")) {
+            turno = this.lerLinha("ERRO! Insira uma opção válida (m/v/n): ");
+        }
+        return turno;
+    }
+
     // ================================================
     // Métodos de menu
     /**
@@ -402,7 +415,8 @@ public class Entrada {
 
         System.out.println("Cadastrando sala.");
         String desc = this.lerLinha("Digite o nome da sala: ");
-        String extra = this.lerLinha("Possui projetor? (s/n): ");
+        System.out.print("Possui projetor?");
+        boolean extra = this.lerExtra(s);
 
         if (s.getSala(desc) == null) {
             Sala sala = new Sala(desc, extra);
@@ -421,7 +435,9 @@ public class Entrada {
 
         System.out.println("Cadastrando estação.");
         String desc = this.lerLinha("Digite o nome da estação: ");
-        String extra = this.lerLinha("Possui monitor extra? (s/n): ");
+        System.out.print("Possui monitor extra?");
+        boolean extra = this.lerExtra(s);
+
 
         if (s.getEstacao(desc) == null) {
             Estacao estacao = new Estacao(desc, extra);
@@ -433,4 +449,83 @@ public class Entrada {
 
     // ================================================
     // Métodos de Reservas
+    /**
+     * Faz a reserva para um dia inteiro.
+     * @param s: Objeto da classe Sistema
+     */
+    public void reservarData(Sistema s) {
+        String tipo = this.lerTipo(s);
+        if (tipo.equals("s")) {
+            System.out.print("Deseja reservar sala com projetor?");
+        } else {
+            System.out.print("Deseja reservar estação com monitor extra?");
+        }
+        boolean extra = this.lerExtra(s);
+        Data data = this.lerData(s);
+        Cliente cliente = this.lerCliente(s);
+
+        if (cliente != null) {
+            if (s.reservar(tipo, data, cliente, extra)) {
+                System.out.println("Reserva realizada com sucesso!");
+            } else {
+                System.out.println("Não foi possível realizar a reserva. Tente novamente em outra data.");
+            }
+        } else {
+            System.out.println("Cliente não encontrado. Tente novamente.");
+        }
+    }
+
+    /**
+     * Faz a reserva para um dia inteiro.
+     * @param s: Objeto da classe Sistema
+     */
+    public void reservarTurno(Sistema s) {
+        String tipo = this.lerTipo(s);
+        if (tipo.equals("s")) {
+            System.out.print("Deseja reservar sala com projetor?");
+        } else {
+            System.out.print("Deseja reservar estação com monitor extra?");
+        }
+        boolean extra = this.lerExtra(s);
+        Data data = this.lerData(s);
+        String turno = this.lerTurno(s);
+        Cliente cliente = this.lerCliente(s);
+
+        if (cliente != null) {
+            if (s.reservar(tipo, data, turno, cliente, extra)) {
+                System.out.println("Reserva realizada com sucesso!");
+            } else {
+                System.out.println("Não foi possível realizar a reserva. Tente novamente em outra data ou turno.");
+            }
+        } else {
+            System.out.println("Cliente não encontrado. Tente novamente.");
+        }
+    }
+
+    /**
+     * Faz a reserva para um dia inteiro.
+     * @param s: Objeto da classe Sistema
+     */
+    public void reservarHorario(Sistema s) {
+        String tipo = this.lerTipo(s);
+        if (tipo.equals("s")) {
+            System.out.print("Deseja reservar sala com projetor?");
+        } else {
+            System.out.print("Deseja reservar estação com monitor extra?");
+        }
+        boolean extra = this.lerExtra(s);
+        Data data = this.lerData(s);
+        String turno = this.lerTurno(s);
+        Cliente cliente = this.lerCliente(s);
+
+        if (cliente != null) {
+            if (s.reservar(tipo, data, turno, cliente, extra)) {
+                System.out.println("Reserva realizada com sucesso!");
+            } else {
+                System.out.println("Não foi possível realizar a reserva. Tente novamente em outra data ou turno.");
+            }
+        } else {
+            System.out.println("Cliente não encontrado. Tente novamente.");
+        }
+    }
 }

@@ -1,15 +1,27 @@
 /**
  * Classe principal do Sistema de Gerenciamento de Coworking
- * @author Hilario Seibel Junior e <seu nome aqui>
+ * @author Hilario Seibel Junior e José Otávio de Souza Lessa
  */
 
 public class Main {
     public static void main(String[] args) {
-        
-        Data d = new Data(8,5,2026);
-        System.out.println(d);
+        Entrada e = new Entrada();
+        Sistema s = e.criarSistema();
 
-        Cliente c = new Cliente("Jose", "123", "jose@gmail.com", "123");
-        System.out.println(c);
+        int op = e.menu();
+
+        while (op != 0) {
+            switch (op) {
+                case 1:
+                    e.menuCadastro(s);
+                    break;
+                case 2:
+                    // chamar metodo com menu de reservas
+                    e.menuReserva(s);
+                    break;
+            }
+            op = e.menu();
+        }
+        //e.fechar();
     }
 }

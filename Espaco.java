@@ -54,7 +54,7 @@ public class Espaco {
         // Gambiarra para arredondar a hora cobradas caso a hora seja 
         // a mesma ou, ex: (18h até 19h 20min -> 2 horas cobradas).
         // Deve ter jeito melhor de fazer, mas é o que encaixa na regra do negócio.
-        return this.valorHora * (fim.getHora() - inicio.getHora() + (fim.getMinuto() > 0 ? 1 : 0)) + this.taxaLimpeza;
+        return this.getValorHora() * (fim.getHora() - inicio.getHora() + (fim.getMin() > 0 ? 1 : 0)) + this.getTaxaLimpeza();
     }
 
     /**
@@ -94,51 +94,11 @@ public class Espaco {
     }
 
     /**
-     * Define a taxa de limpeza do espaço.
-     * @param taxaLimpeza Double contendo a nova taxa de limpeza do espaço
-     */
-    public void setTaxaLimpeza(double taxaLimpeza) {
-        this.taxaLimpeza = taxaLimpeza;
-    }
-
-    /**
-     * Retorna a descrição do espaço.
-     * @return String contendo a descrição do espaço
-     */
-    public String getDescricao() {
-        return descricao;
-    }
-
-    /**
      * Retorna o valor por hora do espaço.
      * @return Double contendo o valor por hora do espaço
      */
     public double getValorHora() {
         return valorHora;
-    }
-
-    /**
-     * Define o valor por hora do espaço.
-     * @param valorHora Double contendo o novo valor por hora do espaço
-     */
-    public void setValorHora(double valorHora) {
-        this.valorHora = valorHora;
-    }
-
-    /**
-     * Retorna a taxa de limpeza do espaço.
-     * @return Double contendo a taxa de limpeza do espaço
-     */
-    public double getTaxaLimpeza() {
-        return taxaLimpeza;
-    }
-
-    /**
-     * Define a taxa de limpeza do espaço.
-     * @param taxaLimpeza Double contendo a nova taxa de limpeza do espaço
-     */
-    public void setTaxaLimpeza(double taxaLimpeza) {
-        this.taxaLimpeza = taxaLimpeza;
     }
 
     public ArrayList<Reserva> getReservas(){

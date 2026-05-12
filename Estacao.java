@@ -9,7 +9,7 @@ public class Estacao extends Espaco {
      * @param descricao String contendo a descrição do espaço
      * @param monitorExtra Boolean indicando se a estação possui monitor extra ou não
      */
-    Estacao(String descricao, boolean monitorExtra) {
+    public Estacao(String descricao, boolean monitorExtra) {
         super(descricao);
         this.monitorExtra = monitorExtra;
     }
@@ -18,7 +18,7 @@ public class Estacao extends Espaco {
     // Outros métodos
     
     @Override
-    public double preco(Horario inicio, Horrario fim) {
+    public double preco(Horario inicio, Horario fim) {
         return super.preco(inicio, fim) + (this.possuiAdicionalExtra() ? this.getPrecoMonitor() : 0);
     }
 
@@ -37,7 +37,7 @@ public class Estacao extends Espaco {
         this.monitorExtra = monitorExtra;
     }
 
-    public void getPrecoMonitor() {
+    public double getPrecoMonitor() {
         return this.precoMonitor;
     }
 

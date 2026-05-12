@@ -10,17 +10,17 @@ public class Sistema {
     // Construtor
     public Sistema(double valorHora, double taxaLimpeza, double precoProjetor, double precoMonitor) {
         this.clientes = new ArrayList<Cliente>();
-        this.estacoes = new ArrayList<Estacao>();
-        this.salas = new ArrayList<Sala>();
+        this.estacoes = new ArrayList<Espaco>();
+        this.salas = new ArrayList<Espaco>();
 
-        // salvar informacoes sobre o valor do espaco por hora
-        Espaco.valorHora = valorHora;
-        // salvar as informacoes sobre o valor da taxa de limpeza
-        Espaco.taxaLimpeza = taxaLimpeza;
+        // salvar informacoes sobre o value do espaco por hora
+        Espaco.setValorHora(valorHora);
+        // salvar as informacoes sobre o value da taxa de limpeza
+        Espaco.setTaxaLimpeza(taxaLimpeza);
         // salvar as informacoes sobre o preco do projetor
-        Sala.precoProjetor = precoProjetor;
+        Sala.setPrecoProjetor(precoProjetor);
         // salvar as informacoes sobre o preco do monitor extra
-        Estacao.precoMonitor = precoMonitor;
+        Estacao.setPrecoMonitor(precoMonitor);
     }
 
     // ================================================
@@ -54,7 +54,7 @@ public class Sistema {
         return reservar(tipo, data, inicio, fim, cliente, extra);
     }
 
-    public boolean reservar(String tipo, String turno, Horario fim, Cliente cliente, boolean extra) {
+    public boolean reservar(String tipo, Data data, String turno, Cliente cliente, boolean extra) {
         int hIni, hFim;
         if (turno.equals("matutino")){
             hIni = 8;

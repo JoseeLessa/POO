@@ -9,7 +9,7 @@ public class Sala extends Espaco {
      * @param descricao String contendo a descrição do espaço
      * @param monitorExtra Boolean indicando se a estação possui monitor extra ou não
      */
-    Sala(String descricao, boolean projetor) {
+    public Sala(String descricao, boolean projetor) {
         super(descricao);
         this.projetor = projetor;
     }
@@ -18,8 +18,8 @@ public class Sala extends Espaco {
     // Outros métodos
     
     @Override
-    public double preco(Horario inicio, Horrario fim) {
-        return super.preco(inicio, fim) + (this.possuiAdicionalExtra() ? this.getprecoProjetor() : 0);
+    public double preco(Horario inicio, Horario fim) {
+        return super.preco(inicio, fim) + (this.possuiAdicionalExtra() ? this.getPrecoProjetor() : 0);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class Sala extends Espaco {
         this.projetor = projetor;
     }
 
-    public void getPrecoProjetor() {
+    public double getPrecoProjetor() {
         return this.precoProjetor;
     }
 
@@ -50,6 +50,6 @@ public class Sala extends Espaco {
     // toString
     @Override
     public String toString() {
-        return String.format("%s (Sala %s Projetor)", super, this.possuiAdicionalExtra() ? "com":"sem");
+        return String.format("%s (Sala %s Projetor)", super.toString(), this.possuiAdicionalExtra() ? "com":"sem");
     }
 }
