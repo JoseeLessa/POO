@@ -30,6 +30,15 @@ public class Entrada {
     }
 
     // ================================================
+    // Método fechar scanner
+    /**
+     * Fecha o Scanner de entrada. Deve ser chamado no final do método main.
+     */
+    public void fechar() {
+        this.input.close();
+    }
+
+    // ================================================
     // Métodos de leitura
     /**
      * Faz a leitura de uma linha inteira
