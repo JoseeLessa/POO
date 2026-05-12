@@ -121,6 +121,18 @@ public class Entrada {
         return extra.equals("s");
     }
 
+    /**
+     * Faz a leitura de um cpf e retorna o cliente com aquele CPF.
+     * @param s Objeto da classe Sistema
+     * @return objeto da classe Cliente referente ao CPF digitado
+     */
+    public Cliente lerCliente(Sistema s) {
+        this.listarClientes(s);
+        String cpf = this.lerLinha("Digite o CPF do cliente: ");
+        
+        return s.getCliente(cpf);
+    }
+
     // ================================================
     // Métodos de menu
     /**
@@ -206,7 +218,49 @@ public class Entrada {
         }
     }
 
-    
+    public void menuReserva(Sistema s) {
+        String msg = "*********************\n" +
+                "Escolha uma opção:\n" +
+                "1) Ver reservas\n" +
+                "2) Ver reservas por data\n" +
+                "3) Ver reservas por cliente\n" +
+                "4) Fazer reserva (dia inteiro)\n" +
+                "5) Fazer reserva (turno inteiro)\n" +
+                "6) Fazer reserva (horário específico)\n" +
+                "0) Voltar\n";
+
+        int op = this.lerInteiro(msg);
+
+        while (op < 0 || op > 6) {
+            System.out.println("Opção inválida. Tente novamente: ");
+            op = this.lerInteiro(msg);
+        }
+
+        switch (op) {
+            case 1:
+                this.listarReservas(s);
+                break;
+            case 2:
+                // chamar metodo para listar salas
+                this.listarReservasData(s);
+                break;
+            case 3:
+                // chamar metodo para listar estacoes
+                this.listarReservasCliente(s);
+                break;
+            case 4:
+                this.reservarData(s);
+                break;
+            case 5:
+                // chamar metodo para cadastrar sala
+                this.reservarTurno(s);
+                break;
+            case 6:
+                // chamar metodo para cadastrar estacao
+                this.reservarHorario(s);
+                break;
+        }
+    } 
 
     // ================================================
     // Métodos de print de ArrayList
@@ -229,11 +283,10 @@ public class Entrada {
     }
 
     /**
-     * Lista todos os clientes cadastrados
+     * Lista todas as salas cadastradas.
      * @param s: Objeto da classe Sistema
      */
     public void listarSalas(Sistema s) {
-        System.out.println("*********************************");
         ArrayList<Espaco> salas = s.getSalas();
 
         if (salas.isEmpty()) {
@@ -247,11 +300,10 @@ public class Entrada {
     }
 
     /**
-     * Lista todos os clientes cadastrados
+     * Lista todas as estações cadastradas.
      * @param s: Objeto da classe Sistema
      */
     public void listarEstacoes(Sistema s) {
-        System.out.println("*********************************");
         ArrayList<Espaco> estacoes = s.getEstacoes();
 
         if (estacoes.isEmpty()) {
@@ -265,19 +317,55 @@ public class Entrada {
     }
 
     /**
-     * Lista todos os clientes cadastrados
+     * Lista todas as reservas cadastradas.
      * @param s: Objeto da classe Sistema
      */
-    public void listarClientes(Sistema s) {
-        System.out.println("*********************************");
-        ArrayList<Cliente> clientes = s.getClientes();
+    public void listarReservas(Sistema s) {
+        ArrayList<Reserva> reservas = s.getReservas();
 
-        if (clientes.isEmpty()) {
-            System.out.println("Nenhum cliente cadastrado.");
+        if (reservas.isEmpty()) {
+            System.out.println("Nenhuma reserva feita.");
         } else {
-            System.out.println("Clientes cadastrados:");
-            for (Cliente c : clientes) {
-                System.out.println(c);
+            System.out.println("Reservas cadastradas:");
+            for (Reserva r : reservas) {
+                System.out.println(r);
+            }
+        }
+    }
+
+    /**
+     * Lista todas as reservas cadastradas na data específicada.
+     * @param s: Objeto da classe Sistema
+     */
+    public void listarReservasData(Sistema s) {
+        System.out.println("Escolha uma data (dd/mm/aaaa):");
+        Data data = this.lerData(s);
+        ArrayList<Reserva> reservas = s.getReservas(data);
+
+        if (reservas.isEmpty()) {
+            System.out.println("Nenhuma reserva feita.");
+        } else {
+            System.out.println("Reservas cadastradas nesta data:");
+            for (Reserva r : reservas) {
+                System.out.println(r);
+            }
+        }
+    }
+
+    /**
+     * Lista todas as reservas cadastradas pelo cliente específicado.
+     * @param s: Objeto da classe Sistema
+     */
+    public void listarReservasCliente(Sistema s) {
+        Cliente cli = this.lerCliente(s);
+        ArrayList<Reserva> reservas = s.getReservas(cli);
+
+        if (reservas.isEmpty()) {
+            System.out.println("Nenhuma reserva feita.");
+        } else {
+            System.out.println("Reservas cadastradas para este cliente:");
+            for (Reserva r : reservas) {
+                System.out.println(r);
             }
         }
     }
