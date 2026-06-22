@@ -21,6 +21,7 @@ public class Entrada {
     public Entrada() {
         try {
             // Se houver um arquivo input.txt, o Scanner vai ler dele.
+            this.input = new Scanner(new FileInputStream("input.txt")).useLocale(Locale.US);
         } catch (FileNotFoundException e) {
             // Caso contrário, vai ler do teclado.
             // Locale.US para que o Java sempre leia double com "pontos" ao invés de "vírgulas"
