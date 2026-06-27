@@ -28,10 +28,13 @@ public class Espaco {
      * @return Boolean indicando se o espaço está disponível ou não para reserva
      */
     public boolean disponivel(Data data, Horario inicio, Horario fim, boolean extra){
-        for (Reserva r : reservas) {
-            if (r.getData().equals(data) && this.possuiAdicionalExtra()==extra && inicio.compare(r.getFim()) >= 0 && fim.compare(r.getInicio()) <=0) {
-                return false;
-            }
+        if (!(this.possuiAdicionalExtra() == extra)) return false;
+        for (Reserva r : this.reservas) {
+            if (r.getData().equals(data)){
+                if (inicio.compare(r.getFim()) <= 0 && fim.compare(r.getInicio()) >= 0) {
+                    return false;
+                }
+            } 
         }
         return true;
     }

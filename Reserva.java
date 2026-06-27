@@ -131,7 +131,7 @@ public class Reserva {
         return ("Reserva:\n" +
                 "* Local: " + this.espaco + "\n" +
                 "* Data: " + this.data + "\n" +
-                "* Horário: " + this.inicio + "\n" +
+                "* Horário: " + this.inicio + " - " + this.fim + "\n" +
                 "* Cliente: " + this.cliente + "\n" +
                 "* Valor: R$ " + this.printPreco());
     }
