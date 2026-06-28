@@ -1,4 +1,4 @@
-public class Reserva {
+public class Reserva implements Comparable<Reserva> {
     private Data data;
     private Horario inicio;
     private Horario fim;
@@ -24,6 +24,24 @@ public class Reserva {
         this.cliente = cliente;
     }
     
+    // ================================================
+    // Métodos implementados
+    @Override
+    public int compareTo(Reserva r2) {
+        // Alfabeticamente, pelo nome do cliente
+        if (this.getCliente().getNome().compareTo(r2.getCliente().getNome()) > 0) return 1;
+        if (this.getCliente().getNome().compareTo(r2.getCliente().getNome()) < 0) return -1;
+
+        // Pelo maior preço
+        if (this.preco() > r2.preco()) return -1;
+        if (this.preco() < r2.preco()) return 1;
+
+        // Por data mais recente
+        if (this.getData().compareTo(r2.getData()) > 0) return -1;
+        if (this.getData().compareTo(r2.getData()) < 0) return 1;
+        return 0;
+    }
+
     // ================================================
     // Outros métodos
     /**

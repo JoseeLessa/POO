@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
@@ -346,7 +347,7 @@ public class Entrada {
     public void listarReservas(Sistema s) {
         ArrayList<Reserva> reservas = s.getReservas();
 
-        Collections.reservas.sort();
+        Collections.sort(reservas);
 
         if (reservas.isEmpty()) {
             System.out.println("Nenhuma reserva feita.");
@@ -366,6 +367,7 @@ public class Entrada {
         System.out.println("Escolha uma data (dd/mm/aaaa):");
         Data data = this.lerData(s);
         ArrayList<Reserva> reservas = s.getReservas(data);
+        Collections.sort(reservas);
 
         if (reservas.isEmpty()) {
             System.out.println("Nenhuma reserva feita.");
@@ -384,7 +386,8 @@ public class Entrada {
     public void listarReservasCliente(Sistema s) {
         Cliente cli = this.lerCliente(s);
         ArrayList<Reserva> reservas = s.getReservas(cli);
-
+        Collections.sort(reservas);
+        
         if (reservas.isEmpty()) {
             System.out.println("Nenhuma reserva feita.");
         } else {
