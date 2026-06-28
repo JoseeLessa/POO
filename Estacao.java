@@ -14,6 +14,14 @@ public class Estacao extends Espaco {
         this.monitorExtra = monitorExtra;
     }
 
+    // ===============================================
+    // Métodos abstratos herdados
+    
+    @Override
+    public boolean possuiAdicionalExtra() {
+        return this.monitorExtra;
+    }
+
     // ================================================
     // Outros métodos
     
@@ -22,10 +30,6 @@ public class Estacao extends Espaco {
         return super.preco(inicio, fim) + (this.possuiAdicionalExtra() ? getPrecoMonitor() : 0);
     }
 
-    @Override
-    public boolean possuiAdicionalExtra() {
-        return super.possuiAdicionalExtra() && this.monitorExtra;
-    }
 
     // ================================================
     // Getters e setters

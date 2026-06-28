@@ -1,4 +1,4 @@
-public class Data {
+public class Data implements Comparable<Data> {
     private int dia;
     private int mes;
     private int ano;
@@ -16,6 +16,26 @@ public class Data {
         this.setMes(mes);
         this.setAno(ano);
     }
+    // ================================================
+    // Métodos implementados
+    @Override
+    /**
+     * Verifica se a data é igual a outra data.
+     * @param d2 Data a ser comparada com a data atual
+     * @return int indicando -1 para data mais recente, 0 para igual e 1 para mais antigo.
+     */
+    public int compareTo(Data d2) {
+        if (this.ano > d2.getAno()) return -1;
+        if (this.ano < d2.getAno()) return 1;
+
+        if (this.mes > d2.getMes()) return -1;
+        if (this.mes < d2.getMes()) return 1;
+
+        if (this.dia > d2.getDia()) return -1;
+        if (this.dia < d2.getDia()) return 1;
+        return 0;
+    }
+
 
     // ================================================
     // Outros métodos

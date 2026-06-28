@@ -13,6 +13,14 @@ public class Sala extends Espaco {
         super(descricao);
         this.projetor = projetor;
     }
+    
+    // ===============================================
+    // Métodos abstratos herdados
+    
+    @Override
+    public boolean possuiAdicionalExtra() {
+        return this.projetor;
+    }
 
     // ================================================
     // Outros métodos
@@ -22,10 +30,6 @@ public class Sala extends Espaco {
         return 4*super.preco(inicio, fim) + (this.possuiAdicionalExtra() ? getPrecoProjetor() : 0);
     }
 
-    @Override
-    public boolean possuiAdicionalExtra() {
-        return super.possuiAdicionalExtra() && this.projetor;
-    }
 
     // ================================================
     // Getters e setters

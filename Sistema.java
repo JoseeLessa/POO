@@ -1,15 +1,16 @@
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Sistema {
-    private ArrayList<Cliente> clientes;
+    private HashMap<String, Cliente> clientes;
     private ArrayList<Espaco> estacoes;
     private ArrayList<Espaco> salas;
 
     // ================================================
     // Construtor
     public Sistema(double valorHora, double taxaLimpeza, double precoProjetor, double precoMonitor) {
-        this.clientes = new ArrayList<Cliente>();
+        this.clientes = new HashMap<String, Cliente>();
         this.estacoes = new ArrayList<Espaco>();
         this.salas = new ArrayList<Espaco>();
 
@@ -134,10 +135,7 @@ public class Sistema {
      * @return retorna o cliente caso ache, ou null caso não ache nenhum cliente
      */
     public Cliente getCliente(String cpf) {
-        for (Cliente c : this.clientes) {
-            if (c.getCpf().equals(cpf)) return c;
-        }
-        return null;
+        return clientes.get(cpf);
     }
 
     /**
@@ -209,7 +207,7 @@ public class Sistema {
      * Retorna a lista de todas as estações cadastradas no sistema.
      * @return ArrayList de Estação contendo todas as Estações no sistema
      */
-    public ArrayList<Cliente> getClientes() {
+    public HashMap<String, Cliente> getClientes() {
         return this.clientes;
     }
 
@@ -218,7 +216,7 @@ public class Sistema {
      * @param cliente cliente a ser adicionado
      */
     public void cadastrar(Cliente cliente) {
-        this.clientes.add(cliente);
+        this.clientes.put(cliente.getCpf(), cliente);
     }
     
     /**

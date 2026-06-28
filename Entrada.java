@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -292,14 +293,14 @@ public class Entrada {
      */
     public void listarClientes(Sistema s) {
         System.out.println("*********************************");
-        ArrayList<Cliente> clientes = s.getClientes();
-
+        HashMap<String, Cliente> clientes = s.getClientes();
+        
         if (clientes.isEmpty()) {
             System.out.println("Nenhum cliente cadastrado.");
         } else {
             System.out.println("Clientes cadastrados:");
-            for (Cliente c : clientes) {
-                System.out.println(c);
+            for (HashMap.Entry<String, Cliente> entry : clientes.entrySet()) {
+                System.out.println(entry.getValue());
             }
         }
     }
@@ -344,6 +345,8 @@ public class Entrada {
      */
     public void listarReservas(Sistema s) {
         ArrayList<Reserva> reservas = s.getReservas();
+
+        Collections.reservas.sort();
 
         if (reservas.isEmpty()) {
             System.out.println("Nenhuma reserva feita.");

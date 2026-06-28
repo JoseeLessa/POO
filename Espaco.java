@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Espaco {
+public abstract class Espaco {
     protected String descricao;
     static protected double valorHora;
     static protected double taxaLimpeza;
@@ -16,6 +16,15 @@ public class Espaco {
         this.descricao = descricao;
         this.reservas = new ArrayList<>();
     }
+
+    // ===============================================
+    // Métodos abstratos
+    
+    /**
+     * Verifica se o espaço possui adicional extra (projetor ou monitor).
+     * @return Boolean indicando se o espaço possui ou não adicional extra
+     */
+    public abstract boolean possuiAdicionalExtra();
 
     // ===============================================
     // Outros métodos
@@ -58,14 +67,6 @@ public class Espaco {
         // a mesma ou, ex: (18h até 19h 20min -> 2 horas cobradas).
         // Deve ter jeito melhor de fazer, mas é o que encaixa na regra do negócio.
         return getValorHora() * (fim.getHora() - inicio.getHora() + (fim.getMin() > 0 ? 1 : 0)) + getTaxaLimpeza();
-    }
-
-    /**
-     * Verifica se o espaço possui adicional extra (projetor ou monitor).
-     * @return Boolean indicando se o espaço possui ou não adicional extra
-     */
-    public boolean possuiAdicionalExtra() {
-        return true;
     }
 
     // ================================================
