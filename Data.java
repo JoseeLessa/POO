@@ -1,4 +1,4 @@
-public class Data implements Comparable<Data> {
+public class Data implements Comparable<Data>{
     private int dia;
     private int mes;
     private int ano;
@@ -36,6 +36,20 @@ public class Data implements Comparable<Data> {
         return 0;
     }
 
+    // ================================================
+    // Excessões
+    /**
+     * Verifica se a data é válida, caso não seja, lança uma exceção.
+     * @throws Exception Caso a data seja inválida
+     */
+    public void validaData() throws EntradaInvalidaExceptions {
+        if (this.getAno() < 0) throw new EntradaInvalidaExceptions("ERRO, Ano inválido");
+        if (this.getMes() < 1 || this.getMes() > 12) throw new EntradaInvalidaExceptions("ERRO, Mês inválido");
+        if (this.getDia() < 1 || this.getDia() > 31) throw new EntradaInvalidaExceptions("ERRO, Dia inválido");
+        if (this.getMes() == 2 && this.getDia() > 29) throw new EntradaInvalidaExceptions("ERRO, Dia inválido para o mês de fevereiro");
+        if (this.getMes() == 2 && this.getDia() == 29 && (this.getAno()%4)!= 0) throw new EntradaInvalidaExceptions("ERRO, Dia inválido, ano não bissexto");
+        if ((this.getMes() == 4 || this.getMes() == 6 || this.getMes() == 9 || this.getMes() == 11) && this.getDia() > 30) throw new EntradaInvalidaExceptions("ERRO, Dia inválido para o mês informado");
+    }
 
     // ================================================
     // Outros métodos

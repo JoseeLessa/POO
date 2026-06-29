@@ -22,6 +22,7 @@ public class Main {
             }
             op = e.menu();
         }
+        
         // Método fechar 
         e.fechar();
     }

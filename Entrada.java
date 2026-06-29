@@ -63,10 +63,14 @@ public class Entrada {
      * @param msg: Mensagem que será exibida ao usuário
      * @return O número digitado pelo usuário convertido para int
      */
-    public int lerInteiro(String msg) {
+    public int lerInteiro(String msg) throws EntradaInvalidaExceptions {
         // Imprime uma mensagem ao usuário, lê uma linha contendo um inteiro e retorna este inteiro
         String linha = this.lerLinha(msg);
-        return Integer.parseInt(linha);
+        try {
+            return Integer.parseInt(linha);
+        } catch (NumberFormatException e){
+            throw new EntradaInvalidaExceptions("ERRO, Insira inteiro válido.");
+        }
     }
 
     /**
@@ -74,10 +78,15 @@ public class Entrada {
      * @param msg: Mensagem que será exibida ao usuário
      * @return O número digitado pelo usuário convertido para double
      */
-    private double lerDouble(String msg) {
+    private double lerDouble(String msg) throws EntradaInvalidaExceptions {
         // Imprime uma mensagem ao usuário, lê uma linha contendo um double e retorna este double
         String linha = this.lerLinha(msg);
-        return Double.parseDouble(linha);
+        try {
+            // Substitui o ponto por vírgula antes de testar
+            return Double.parseDouble(linha.replace(",","."));
+        } catch (NumberFormatException e) {
+            throw new EntradaInvalidaExceptions("ERRO! Insira Decimal válido");
+        }
     }
 
     /**
@@ -85,35 +94,51 @@ public class Entrada {
      * @param s Objeto da classe Sistema
      * @return new Data
      */
-    public Data lerData(Sistema s) {
-        int dia = this.lerInteiro("Dia: ");
-        int mes = this.lerInteiro("Mês: ");
-        int ano = this.lerInteiro("Ano: ");
-        
-        return new Data(dia, mes, ano);
+    public Data lerData(Sistema s) throws EntradaInvalidaExceptions {
+        try {
+            int dia = this.lerInteiro("Dia: ");
+            int mes = this.lerInteiro("Mês: ");
+            int ano = this.lerInteiro("Ano: ");
+    
+            Data saida = new Data(dia, mes, ano);
+            saida.validaData();
+            return saida;
+        } catch (EntradaInvalidaExceptions e) {
+            throw new EntradaInvalidaExceptions(e.getMessage());
+        }
     }
 
     /**
      * Faz a leitura de dados para criar um Horario.
      * @param s Objeto da classe Sistema
+     * @throws EntradaInvalidaExceptions indicando entrada inválida.
      * @return new Horario
      */
-    public Horario lerHorario(Sistema s) {
-        int hora = this.lerInteiro("Hora: ");
-        int minutos = this.lerInteiro("Minuto: ");
+    public Horario lerHorario(Sistema s) throws EntradaInvalidaExceptions{
+        try {
+            int hora = this.lerInteiro("Hora: ");
+            int minutos = this.lerInteiro("Minuto: ");
 
-        return new Horario(hora, minutos);
+            Horario saida = new Horario(hora, minutos);
+            saida.validaHorario();
+            return saida;
+        } catch (EntradaInvalidaExceptions e) {
+            throw new EntradaInvalidaExceptions(e.getMessage());
+        }
     }
 
     /**
      * Faz a leitura do tipo do espaço que o cliente desejar reservar.
      * @param s
+     * @throws EntradaInvalidaExceptions indicando entrada inválida.
      * @return String contendo 's' para sala ou 'e' para estação de trabalho
      */
-    public String lerTipo(Sistema s) {
-        String tipo = this.lerLinha("Deseja reservar uma sala ou estação de trabalho? (s/e): ");
-        while (!tipo.equals("s") && !tipo.equals("e")) {
-            tipo = this.lerLinha("ERRO! Insira uma opção válida (s/e): ");
+    public String lerTipo(Sistema s) throws EntradaInvalidaExceptions{
+        String tipo = this.lerLinha("Deseja reservar uma sala ou estação de trabalho? (s/e): ").trim().toLowerCase();
+        
+        if (tipo.isEmpty()) throw new EntradaInvalidaExceptions("ERRO, campo vazio.");
+        if (!tipo.equals("s") && !tipo.equals("e")) {
+            throw new EntradaInvalidaExceptions("ERRO, insira uma opção válida (s/e)");
         }
         return tipo;
     }
@@ -122,12 +147,16 @@ public class Entrada {
      * Faz a leitura se o cliente quer uma reseva com extra. 
      * Não há Texto para o tipo da sala, apenas as opções.
      * @param s Objeto da classe Sistema
+     * @throws EntradaInvalidaExceptions indicando entrada inválida.
      * @return booleano contendo a resposta
      */
-    public boolean lerExtra(Sistema s) {
-        String extra = this.lerLinha("(s/n): ");
-        while (!extra.equals("s") && !extra.equals("n")) {
-            extra = this.lerLinha("ERRO! Insira uma opção válida (s/n): ");
+    public boolean lerExtra(Sistema s) throws EntradaInvalidaExceptions {
+        
+        String extra = this.lerLinha("(s/n): ").trim().toLowerCase();
+
+        if (extra.isEmpty()) throw new EntradaInvalidaExceptions("ERRO, campo vazio.");
+        if (!extra.equals("s") && !extra.equals("n")) {
+            throw new EntradaInvalidaExceptions("ERRO, insira uma opção válida (s/n)");
         }
         return extra.equals("s");
     }
@@ -149,11 +178,14 @@ public class Entrada {
      * @param s Objeto da classe Sistema
      * @return string contendo o turno escolhido (m/v/n) 
      */
-    public String lerTurno(Sistema s) {
-        String turno = this.lerLinha("Escolha um turno (m/v/n): ");
-        while (!turno.equals("m") && !turno.equals("v") && !turno.equals("n")) {
-            turno = this.lerLinha("ERRO! Insira uma opção válida (m/v/n): ");
-        }
+    public String lerTurno(Sistema s) throws EntradaInvalidaExceptions {
+        // Ler turno (tranforma em minusculo e retira espaços em branco)
+        String turno = this.lerLinha("Escolha um turno (m/v/n): ").trim().toLowerCase();
+
+        if (turno.isEmpty()) throw new EntradaInvalidaExceptions("ERRO, campo vazio.");
+        if (!turno.equals("m") && !turno.equals("v") && !turno.equals("n"))
+            throw new EntradaInvalidaExceptions("ERRO! Turno inválido. (m/v/n)");
+        
         return turno;
     }
 
@@ -166,16 +198,33 @@ public class Entrada {
      */
     public Sistema criarSistema() {
         System.out.println("Iniciando o sistema...");
-        double valorHora = this.lerDouble("Digite o valor por hora para usar um espaço: R$ ");
-        double taxaLimpeza = this.lerDouble("Digite a taxa de limpeza: R$ ");
-        double precoProjetor = this.lerDouble("Digite o valor extra para usar o projetor: R$ ");
-        double precoMonitor = this.lerDouble("Digite o valor para usar o monitor extra: R$ ");
+        System.out.println("Arquivo de entrada não encontrado. Escolha os valores do sistema.");
+
+        double valorHora;
+        double taxaLimpeza;
+        double precoProjetor;
+        double precoMonitor;
+
+        try {
+            valorHora = this.lerDouble("Digite o valor por hora para usar um espaço: R$ ");
+            taxaLimpeza = this.lerDouble("Digite a taxa de limpeza: R$ ");
+            precoProjetor = this.lerDouble("Digite o valor extra para usar o projetor: R$ ");
+            precoMonitor = this.lerDouble("Digite o valor para usar o monitor extra: R$ ");
+        } catch (EntradaInvalidaExceptions e) {
+            System.out.println(e.getMessage());
+            System.out.println("Valores inválidos. Usando valores padrão.");
+            valorHora = 10.0;
+            taxaLimpeza = 5.0;
+            precoProjetor = 2.0;
+            precoMonitor = 1.0;
+        }
 
         return new Sistema(valorHora, taxaLimpeza, precoProjetor, precoMonitor);
     }
 
     /**
      * Imprime o menu principal, lê a opção escolhida pelo usuário e retorna a opção selecionada.
+     * Só aceita erroMax tentivas, se passar retorna 0 pra finalizar o sistema.
      * @return Inteiro contendo a opção escolhida pelo usuário
      */
     public int menu() {
@@ -184,19 +233,33 @@ public class Entrada {
                 "1) Cadastros\n" +
                 "2) Reservas\n" +
                 "0) Sair\n";
+        int op = 0;
+        int erroMax = 5;
+        int erroAtual = 0;
 
-        int op = this.lerInteiro(msg);
+        while (erroAtual < erroMax) { 
+            try {
+                erroAtual++;
 
-        while (op < 0 || op > 2) {
-            System.out.println("Opção inválida. Tente novamente: ");
-            op = this.lerInteiro(msg);
+                op = this.lerInteiro(msg);
+
+                if (op >= 0 && op <= 2) {
+                    return op;
+                } else {
+                    System.out.println("Erro ("+ erroAtual + " / " + erroMax +")");
+                    System.out.println("Opção inválida. Tente novamente: ");
+                }
+            } catch (EntradaInvalidaExceptions e) {
+                System.out.println("Erro ("+ erroAtual + " / " + erroMax +")");
+                System.out.println("Opção inválida. Tente novamente: ");
+            }
         }
-
-        return op;
+        return 0;
     }
 
     /**
      * Imprime o menu de cadastros, lê a opção escolhida pelo usuário e chama o metodo apropriado.
+     * Só aceita uma tentiva, se errar volta pro menu principal.
      */
     public void menuCadastro(Sistema s) {
         String msg = "*********************\n" +
@@ -209,39 +272,48 @@ public class Entrada {
                 "6) Cadastrar estação de trabalho\n" +
                 "0) Voltar\n";
 
-        int op = this.lerInteiro(msg);
+        int op = 0;
 
-        while (op < 0 || op > 6) {
-            System.out.println("Opção inválida. Tente novamente: ");
+        try {
             op = this.lerInteiro(msg);
-        }
 
-        switch (op) {
-            case 1:
-                this.listarClientes(s);
-                break;
-            case 2:
-                // chamar metodo para listar salas
-                this.listarSalas(s);
-                break;
-            case 3:
-                // chamar metodo para listar estacoes
-                this.listarEstacoes(s);
-                break;
-            case 4:
-                this.cadastrarCliente(s);
-                break;
-            case 5:
-                // chamar metodo para cadastrar sala
-                this.cadastrarSala(s);
-                break;
-            case 6:
-                // chamar metodo para cadastrar estacao
-                this.cadastrarEstacao(s);
-                break;
+            if (op >= 0 && op <= 6) {
+                switch (op) {
+                    case 1:
+                        this.listarClientes(s);
+                        break;
+                    case 2:
+                        // chamar metodo para listar salas
+                        this.listarSalas(s);
+                        break;
+                    case 3:
+                        // chamar metodo para listar estacoes
+                        this.listarEstacoes(s);
+                        break;
+                    case 4:
+                        this.cadastrarCliente(s);
+                        break;
+                    case 5:
+                        // chamar metodo para cadastrar sala
+                        this.cadastrarSala(s);
+                        break;
+                    case 6:
+                        // chamar metodo para cadastrar estacao
+                        this.cadastrarEstacao(s);
+                        break;
+                }
+            } else {
+                System.out.println("Opção inválida.");
+            }
+        } catch (EntradaInvalidaExceptions e) {
+            System.out.println("Erro ao ler opção.");
         }
     }
 
+    /**
+     * Imprime o menu de reservas, lê a opção escolhida pelo usuário e chama o metodo apropriado.
+     * Só aceita uma tentiva, se errar volta pro menu principal.
+     */
     public void menuReserva(Sistema s) {
         String msg = "*********************\n" +
                 "Escolha uma opção:\n" +
@@ -253,36 +325,41 @@ public class Entrada {
                 "6) Fazer reserva (horário específico)\n" +
                 "0) Voltar\n";
 
-        int op = this.lerInteiro(msg);
+        int op = 0;
 
-        while (op < 0 || op > 6) {
-            System.out.println("Opção inválida. Tente novamente: ");
+        try {
             op = this.lerInteiro(msg);
-        }
 
-        switch (op) {
-            case 1:
-                this.listarReservas(s);
-                break;
-            case 2:
-                // chamar metodo para listar salas
-                this.listarReservasData(s);
-                break;
-            case 3:
-                // chamar metodo para listar estacoes
-                this.listarReservasCliente(s);
-                break;
-            case 4:
-                this.reservarData(s);
-                break;
-            case 5:
-                // chamar metodo para cadastrar sala
-                this.reservarTurno(s);
-                break;
-            case 6:
-                // chamar metodo para cadastrar estacao
-                this.reservarHorario(s);
-                break;
+            if (op >=0 && op <= 6) {
+                switch (op) {
+                    case 1:
+                        this.listarReservas(s);
+                        break;
+                    case 2:
+                        // chamar metodo para listar salas
+                        this.listarReservasData(s);
+                        break;
+                    case 3:
+                        // chamar metodo para listar estacoes
+                        this.listarReservasCliente(s);
+                        break;
+                    case 4:
+                        this.reservarData(s);
+                        break;
+                    case 5:
+                        // chamar metodo para cadastrar sala
+                        this.reservarTurno(s);
+                        break;
+                    case 6:
+                        // chamar metodo para cadastrar estacao
+                        this.reservarHorario(s);
+                        break;
+                }
+            } else {
+                System.out.println("Opção inválida.");
+            }
+        } catch (EntradaInvalidaExceptions e) {
+            System.out.println("Erro ao ler opção.");
         }
     } 
 
@@ -365,17 +442,25 @@ public class Entrada {
      */
     public void listarReservasData(Sistema s) {
         System.out.println("Escolha uma data (dd/mm/aaaa):");
-        Data data = this.lerData(s);
-        ArrayList<Reserva> reservas = s.getReservas(data);
-        Collections.sort(reservas);
+        
+        Data data;
+        
+        try {
+            data = this.lerData(s);
 
-        if (reservas.isEmpty()) {
-            System.out.println("Nenhuma reserva feita.");
-        } else {
-            System.out.println("Reservas cadastradas nesta data:");
-            for (Reserva r : reservas) {
-                System.out.println(r);
+            ArrayList<Reserva> reservas = s.getReservas(data);
+            Collections.sort(reservas);
+
+            if (reservas.isEmpty()) {
+                System.out.println("Nenhuma reserva feita.");
+            } else {
+                System.out.println("Reservas cadastradas nesta data:");
+                for (Reserva r : reservas) {
+                    System.out.println(r);
+                }
             }
+        } catch (EntradaInvalidaExceptions e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -428,16 +513,20 @@ public class Entrada {
     public void cadastrarSala(Sistema s) {
         this.listarSalas(s);
 
-        System.out.println("Cadastrando sala.");
-        String desc = this.lerLinha("Digite o nome da sala: ");
-        System.out.print("Possui projetor?");
-        boolean extra = this.lerExtra(s);
+        try {
+            System.out.println("Cadastrando sala.");
+            String desc = this.lerLinha("Digite o nome da sala: ");
+            System.out.print("Possui projetor?");
+            boolean extra = this.lerExtra(s);
 
-        if (s.getSala(desc) == null) {
-            Sala sala = new Sala(desc, extra);
-            s.cadastrar(sala);
-        } else {
-            System.out.println("Sala já existe. Sala não inserida.");
+            if (s.getSala(desc) == null) {
+                Sala sala = new Sala(desc, extra);
+                s.cadastrar(sala);
+            } else {
+                System.out.println("Sala já existe. Sala não inserida.");
+            }
+        } catch (EntradaInvalidaExceptions e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -448,17 +537,20 @@ public class Entrada {
     public void cadastrarEstacao(Sistema s) {
         this.listarEstacoes(s);
 
-        System.out.println("Cadastrando estação.");
-        String desc = this.lerLinha("Digite o nome da estação: ");
-        System.out.print("Possui monitor extra?");
-        boolean extra = this.lerExtra(s);
+        try {
+            System.out.println("Cadastrando estação.");
+            String desc = this.lerLinha("Digite o nome da estação: ");
+            System.out.print("Possui monitor extra?");
+            boolean extra = this.lerExtra(s);
 
-
-        if (s.getEstacao(desc) == null) {
-            Estacao estacao = new Estacao(desc, extra);
-            s.cadastrar(estacao);
-        } else {
-            System.out.println("Estação já existe. Estação não inserida.");
+            if (s.getEstacao(desc) == null) {
+                Estacao estacao = new Estacao(desc, extra);
+                s.cadastrar(estacao);
+            } else {
+                System.out.println("Estação já existe. Estação não inserida.");
+            }
+        } catch (EntradaInvalidaExceptions e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -469,24 +561,28 @@ public class Entrada {
      * @param s: Objeto da classe Sistema
      */
     public void reservarData(Sistema s) {
-        String tipo = this.lerTipo(s);
-        if (tipo.equals("s")) {
-            System.out.print("Deseja reservar sala com projetor?");
-        } else {
-            System.out.print("Deseja reservar estação com monitor extra?");
-        }
-        boolean extra = this.lerExtra(s);
-        Data data = this.lerData(s);
-        Cliente cliente = this.lerCliente(s);
-
-        if (cliente != null) {
-            if (s.reservar(tipo, data, cliente, extra)) {
-                System.out.println("Reserva realizada com sucesso!");
+        try {
+            String tipo = this.lerTipo(s);
+            if (tipo.equals("s")) {
+                System.out.print("Deseja reservar sala com projetor?");
             } else {
-                System.out.println("Não foi possível realizar a reserva. Tente novamente em outra data.");
+                System.out.print("Deseja reservar estação com monitor extra?");
             }
-        } else {
-            System.out.println("Cliente não encontrado. Tente novamente.");
+            boolean extra = this.lerExtra(s);
+            Data data = this.lerData(s);
+            Cliente cliente = this.lerCliente(s);
+
+            if (cliente != null) {
+                if (s.reservar(tipo, data, cliente, extra)) {
+                    System.out.println("Reserva realizada com sucesso!");
+                } else {
+                    System.out.println("Não foi possível realizar a reserva. Tente novamente em outra data.");
+                }
+            } else {
+                System.out.println("Cliente não encontrado. Tente novamente.");
+            }
+        } catch (EntradaInvalidaExceptions e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -495,25 +591,29 @@ public class Entrada {
      * @param s: Objeto da classe Sistema
      */
     public void reservarTurno(Sistema s) {
-        String tipo = this.lerTipo(s);
-        if (tipo.equals("s")) {
-            System.out.print("Deseja reservar sala com projetor?");
-        } else {
-            System.out.print("Deseja reservar estação com monitor extra?");
-        }
-        boolean extra = this.lerExtra(s);
-        Data data = this.lerData(s);
-        String turno = this.lerTurno(s);
-        Cliente cliente = this.lerCliente(s);
-
-        if (cliente != null) {
-            if (s.reservar(tipo, data, turno, cliente, extra)) {
-                System.out.println("Reserva realizada com sucesso!");
+        try {
+            String tipo = this.lerTipo(s);
+            if (tipo.equals("s")) {
+                System.out.print("Deseja reservar sala com projetor?");
             } else {
-                System.out.println("Não foi possível realizar a reserva. Tente novamente em outra data ou turno.");
+                System.out.print("Deseja reservar estação com monitor extra?");
             }
-        } else {
-            System.out.println("Cliente não encontrado. Tente novamente.");
+            boolean extra = this.lerExtra(s);
+            Data data = this.lerData(s);
+            String turno = this.lerTurno(s);
+            Cliente cliente = this.lerCliente(s);
+
+            if (cliente != null) {
+                if (s.reservar(tipo, data, turno, cliente, extra)) {
+                    System.out.println("Reserva realizada com sucesso!");
+                } else {
+                    System.out.println("Não foi possível realizar a reserva. Tente novamente em outra data ou turno.");
+                }
+            } else {
+                System.out.println("Cliente não encontrado. Tente novamente.");
+            }
+        } catch (EntradaInvalidaExceptions e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -522,28 +622,36 @@ public class Entrada {
      * @param s: Objeto da classe Sistema
      */
     public void reservarHorario(Sistema s) {
-        String tipo = this.lerTipo(s);
-        if (tipo.equals("s")) {
-            System.out.print("Deseja reservar sala com projetor?");
-        } else {
-            System.out.print("Deseja reservar estação com monitor extra?");
-        }
-        boolean extra = this.lerExtra(s);
-        System.out.println("Escolha o horário de início da reserva:");
-        Data data = this.lerData(s);
-        Horario inicio = this.lerHorario(s);
-        System.out.println("Escolha o horário de fim da reserva:");
-        Horario fim = this.lerHorario(s);
-        Cliente cliente = this.lerCliente(s);
-
-        if (cliente != null) {
-            if (s.reservar(tipo, data, inicio, fim, cliente, extra)) {
-                System.out.println("Reserva realizada com sucesso!");
+        try {
+            String tipo = this.lerTipo(s);
+            if (tipo.equals("s")) {
+                System.out.print("Deseja reservar sala com projetor?");
             } else {
-                System.out.println("Não foi possível realizar a reserva. Tente novamente em outro horário ou data.");
+                System.out.print("Deseja reservar estação com monitor extra?");
             }
-        } else {
-            System.out.println("Cliente não encontrado. Tente novamente.");
+
+            boolean extra = this.lerExtra(s);
+
+            System.out.println("Escolha o horário de início da reserva:");
+            Data data = this.lerData(s);
+            Horario inicio = this.lerHorario(s);
+            System.out.println("Escolha o horário de fim da reserva:");
+            Horario fim = this.lerHorario(s);
+
+            Cliente cliente = this.lerCliente(s);
+
+            if (cliente != null) {
+                if (s.reservar(tipo, data, inicio, fim, cliente, extra)) {
+                    System.out.println("Reserva realizada com sucesso!");
+                } else {
+                    System.out.println("Não foi possível realizar a reserva. Tente novamente em outro horário ou data.");
+                }
+            } else {
+                System.out.println("Cliente não encontrado. Tente novamente.");
+            }
+        } catch (EntradaInvalidaExceptions e) {
+            System.out.println(e.getMessage());
         }
+        
     }
 }

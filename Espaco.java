@@ -128,7 +128,5 @@ public abstract class Espaco {
     // ================================================
     // toString
     @Override
-    public String toString() {
-        return this.getDescricao();
-    }
+    public abstract String toString();
 }

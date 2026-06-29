@@ -70,6 +70,6 @@ public class Sala extends Espaco {
     // toString
     @Override
     public String toString() {
-        return String.format("%s (Sala %s Projetor)", super.toString(), this.possuiAdicionalExtra() ? "com":"sem");
+        return String.format("%s (Sala %s Projetor)", super.getDescricao(), this.possuiAdicionalExtra() ? "com":"sem");
     }
 }

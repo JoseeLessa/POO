@@ -13,6 +13,18 @@ public class Horario {
         this.setHora(hora);
         this.setMin(min);
     }
+    // ================================================
+    // Excessões
+    /**
+     * Verifica se o horário é válido, caso não seja, lança uma exceção.
+     * @throws EntradaInvalidaExceptions Caso o horário seja inválido
+     */
+    public void validaHorario() throws EntradaInvalidaExceptions {
+        if (this.getHora() < 0 || this.getHora() > 23) throw new EntradaInvalidaExceptions("ERRO, Hora inválida");
+        if (this.getMin() < 0 || this.getMin() > 59) throw new EntradaInvalidaExceptions("ERRO, Minuto inválido");
+        if (this.getHora() == 22 && this.getMin() > 0) throw new EntradaInvalidaExceptions("ERRO, Horário inválido, horário de fechamento é 22:00");
+        if (this.getHora() < 8) throw new EntradaInvalidaExceptions("ERRO, Horário inválido, horário de abertura é 8:00");
+    }
 
     // ================================================
     // Outros métodos
