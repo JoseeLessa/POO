@@ -1,4 +1,4 @@
-public class Cliente {
+public class Cliente implements Salvaveis {
     private String nome;
     private String cpf;
     private String email;
@@ -21,7 +21,23 @@ public class Cliente {
     }
 
     // ================================================
-    // Outros métodos
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",". 
+        return String.format("%s;%s;%s;%s", this.nome, this.cpf, this.email, this.senha);
+    }
+
+    public Cliente fromLinha(String linha) {
+        // Divide linha em Array de 4 Strings
+        String[] campos = linha.split(";");
+
+        // Não é Cliente ou registro errado
+        if (campos.length != 4) {
+            throw new IllegalArgumentException("Linha inválida para criar um Cliente: " + linha);
+        }
+        return new Cliente(campos[0], campos[1], campos[2], campos[3]);
+    }
 
     // ================================================
     // Getters e setters

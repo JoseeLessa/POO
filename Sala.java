@@ -23,6 +23,25 @@ public class Sala extends Espaco {
     }
 
     // ================================================
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",".
+        return String.format("%s;%s", super.toLinha(), this.getProjetor()? "s": "n");
+    }
+
+    public Estacao fromLinha(String linha){
+        // Divide linha em Array de Strings
+        String[] campos = linha.split(";");
+
+        // Não é Espaco ou registro errado
+        if (campos.length != 2) {
+            throw new IllegalArgumentException("Linha inválida para criar uma Sala: " + linha);
+        }
+        return new Estacao(campos[0], campos[1].equals("s"));
+    }
+
+    // ================================================
     // Outros métodos
     
     @Override

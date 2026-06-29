@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public abstract class Espaco {
+public abstract class Espaco implements Salvaveis {
     protected String descricao;
     static protected double valorHora;
     static protected double taxaLimpeza;
@@ -16,6 +16,16 @@ public abstract class Espaco {
         this.descricao = descricao;
         this.reservas = new ArrayList<>();
     }
+
+    // ================================================
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",".
+        return String.format("%s;", this.descricao);
+    }
+
+    public abstract Espaco fromLinha(String linha);
 
     // ===============================================
     // Métodos abstratos

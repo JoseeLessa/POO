@@ -1,4 +1,4 @@
-public class Reserva implements Comparable<Reserva> {
+public class Reserva implements Comparable<Reserva>, Salvaveis{
     private Data data;
     private Horario inicio;
     private Horario fim;
@@ -40,6 +40,25 @@ public class Reserva implements Comparable<Reserva> {
         if (this.getData().compareTo(r2.getData()) > 0) return -1;
         if (this.getData().compareTo(r2.getData()) < 0) return 1;
         return 0;
+    }
+
+    // ================================================
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",".
+        return String.format("%s;%s;%s;%s;%s", this.data, this.inicio, this.fim, this.cliente.getCpf());
+    }
+
+    public Reserva fromLinha(String linha) {
+        // Divide linha em Array de Strings
+        String[] campos = linha.split(";");
+
+        // Não é Espaco ou registro errado
+        if (campos.length != 5) {
+            throw new IllegalArgumentException("Linha inválida para criar uma Reserva: " + linha);
+        }
+        return new Reserva(campos[0], campos[1], campos[2], campos[3], campos[4]);
     }
 
     // ================================================
