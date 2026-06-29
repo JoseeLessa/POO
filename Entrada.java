@@ -101,7 +101,7 @@ public class Entrada {
             int ano = this.lerInteiro("Ano: ");
     
             Data saida = new Data(dia, mes, ano);
-            saida.validaData();
+            saida.validar();
             return saida;
         } catch (EntradaInvalidaExceptions e) {
             throw new EntradaInvalidaExceptions(e.getMessage());
@@ -120,7 +120,7 @@ public class Entrada {
             int minutos = this.lerInteiro("Minuto: ");
 
             Horario saida = new Horario(hora, minutos);
-            saida.validaHorario();
+            saida.validar();
             return saida;
         } catch (EntradaInvalidaExceptions e) {
             throw new EntradaInvalidaExceptions(e.getMessage());
@@ -233,7 +233,6 @@ public class Entrada {
                 "1) Cadastros\n" +
                 "2) Reservas\n" +
                 "0) Sair\n";
-        int op = 0;
         int erroMax = 5;
         int erroAtual = 0;
 
@@ -241,7 +240,7 @@ public class Entrada {
             try {
                 erroAtual++;
 
-                op = this.lerInteiro(msg);
+                int op = this.lerInteiro(msg);
 
                 if (op >= 0 && op <= 2) {
                     return op;
@@ -272,10 +271,8 @@ public class Entrada {
                 "6) Cadastrar estação de trabalho\n" +
                 "0) Voltar\n";
 
-        int op = 0;
-
         try {
-            op = this.lerInteiro(msg);
+            int op = this.lerInteiro(msg);
 
             if (op >= 0 && op <= 6) {
                 switch (op) {
@@ -325,10 +322,8 @@ public class Entrada {
                 "6) Fazer reserva (horário específico)\n" +
                 "0) Voltar\n";
 
-        int op = 0;
-
         try {
-            op = this.lerInteiro(msg);
+            int op = this.lerInteiro(msg);
 
             if (op >=0 && op <= 6) {
                 switch (op) {

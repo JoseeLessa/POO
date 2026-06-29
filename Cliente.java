@@ -4,7 +4,7 @@ public class Cliente {
     private String email;
     private String senha;
 
-    // ================================================
+    // ================================================e
     // Construtor
     /**
      * Construtor da classe Usuários, que recebe o nome, cpf, email e a senha a serem cadastradas.
@@ -14,10 +14,10 @@ public class Cliente {
      * @param senha String com senha do usuário a ser cadastrado
      */
     public Cliente(String nome, String cpf, String email, String senha) {
-        this.setNome(nome);
-        this.setCpf(cpf);
-        this.setEmail(email);
-        this.setSenha(senha);
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+        this.senha = senha;
     }
 
     // ================================================

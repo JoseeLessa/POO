@@ -1,4 +1,4 @@
-public class Horario {
+public class Horario implements Validaveis {
     private int hora;
     private int min;
 
@@ -10,8 +10,8 @@ public class Horario {
      * @param min Minutos do horário
      */
     public Horario(int hora, int min) {
-        this.setHora(hora);
-        this.setMin(min);
+        this.hora = hora;
+        this.min = min;
     }
     // ================================================
     // Excessões
@@ -19,7 +19,8 @@ public class Horario {
      * Verifica se o horário é válido, caso não seja, lança uma exceção.
      * @throws EntradaInvalidaExceptions Caso o horário seja inválido
      */
-    public void validaHorario() throws EntradaInvalidaExceptions {
+    @Override
+    public void validar() throws EntradaInvalidaExceptions {
         if (this.getHora() < 0 || this.getHora() > 23) throw new EntradaInvalidaExceptions("ERRO, Hora inválida");
         if (this.getMin() < 0 || this.getMin() > 59) throw new EntradaInvalidaExceptions("ERRO, Minuto inválido");
         if (this.getHora() == 22 && this.getMin() > 0) throw new EntradaInvalidaExceptions("ERRO, Horário inválido, horário de fechamento é 22:00");

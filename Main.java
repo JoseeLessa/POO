@@ -23,6 +23,9 @@ public class Main {
             op = e.menu();
         }
         
+        System.out.println("Finalizando o Sistema...");
+        System.out.println("Salvando para /Sistema.txt");
+
         // Método fechar 
         e.fechar();
     }

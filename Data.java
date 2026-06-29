@@ -1,4 +1,4 @@
-public class Data implements Comparable<Data>{
+public class Data implements Comparable<Data>, Validaveis{
     private int dia;
     private int mes;
     private int ano;
@@ -12,9 +12,9 @@ public class Data implements Comparable<Data>{
      * @param ano Ano da data
      */
     public Data(int dia, int mes, int ano) {
-        this.setDia(dia);
-        this.setMes(mes);
-        this.setAno(ano);
+        this.dia = dia;
+        this.mes = mes;
+        this.ano = ano;
     }
     // ================================================
     // Métodos implementados
@@ -40,9 +40,10 @@ public class Data implements Comparable<Data>{
     // Excessões
     /**
      * Verifica se a data é válida, caso não seja, lança uma exceção.
-     * @throws Exception Caso a data seja inválida
+     * @throws EntradaInvalidaExceptions Caso a data seja inválida
      */
-    public void validaData() throws EntradaInvalidaExceptions {
+    @Override
+    public void validar() throws EntradaInvalidaExceptions{
         if (this.getAno() < 0) throw new EntradaInvalidaExceptions("ERRO, Ano inválido");
         if (this.getMes() < 1 || this.getMes() > 12) throw new EntradaInvalidaExceptions("ERRO, Mês inválido");
         if (this.getDia() < 1 || this.getDia() > 31) throw new EntradaInvalidaExceptions("ERRO, Dia inválido");
