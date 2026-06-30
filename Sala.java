@@ -30,7 +30,7 @@ public class Sala extends Espaco {
         return String.format("%s;%s", super.toLinha(), this.getProjetor()? "s": "n");
     }
 
-    public Estacao fromLinha(String linha){
+    public static Sala salaFromLinha(String linha){
         // Divide linha em Array de Strings
         String[] campos = linha.split(";");
 
@@ -38,7 +38,7 @@ public class Sala extends Espaco {
         if (campos.length != 2) {
             throw new IllegalArgumentException("Linha inválida para criar uma Sala: " + linha);
         }
-        return new Estacao(campos[0], campos[1].equals("s"));
+        return new Sala(campos[0], campos[1].equals("s"));
     }
 
     // ================================================

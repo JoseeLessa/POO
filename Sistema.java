@@ -2,7 +2,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Sistema {
+public class Sistema implements Salvaveis {
     private HashMap<String, Cliente> clientes;
     private ArrayList<Espaco> estacoes;
     private ArrayList<Espaco> salas;
@@ -22,6 +22,29 @@ public class Sistema {
         Sala.setPrecoProjetor(precoProjetor);
         // salvar as informacoes sobre o preco do monitor extra
         Estacao.setPrecoMonitor(precoMonitor);
+    }
+
+    // ================================================
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",".
+        return String.format("%s;%s;%s;%s", String.valueOf(Espaco.getValorHora()), String.valueOf(Espaco.getTaxaLimpeza()), String.valueOf(Sala.getPrecoProjetor()), String.valueOf(Estacao.getPrecoMonitor()));
+    }
+
+    public static Sistema sistemaFromLinha(String linha) throws EntradaInvalidaExceptions {
+        try {
+            // Divide linha em Array de Strings
+            String[] campos = linha.split(";");
+
+            // Não é Sistema ou registro errado
+            if (campos.length != 4) {
+                throw new IllegalArgumentException("Linha inválida para criar um Sistema: " + linha);
+            }
+            return new Sistema(Double.parseDouble(campos[0]), Double.parseDouble(campos[1]), Double.parseDouble(campos[2]), Double.parseDouble(campos[3]));
+        } catch (Exception e) {
+            throw new EntradaInvalidaExceptions("Erro ao fazer leitura de Sistema.");
+        }
     }
 
     // ================================================

@@ -22,10 +22,8 @@ public abstract class Espaco implements Salvaveis {
     @Override
     public String toLinha() {
         // Padrão CSV para dados com ",".
-        return String.format("%s;", this.descricao);
+        return String.format("%s", this.descricao);
     }
-
-    public abstract Espaco fromLinha(String linha);
 
     // ===============================================
     // Métodos abstratos

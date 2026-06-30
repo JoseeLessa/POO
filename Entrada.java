@@ -647,6 +647,5 @@ public class Entrada {
         } catch (EntradaInvalidaExceptions e) {
             System.out.println(e.getMessage());
         }
-        
     }
 }

@@ -47,18 +47,21 @@ public class Reserva implements Comparable<Reserva>, Salvaveis{
     @Override
     public String toLinha() {
         // Padrão CSV para dados com ",".
-        return String.format("%s;%s;%s;%s;%s", this.data, this.inicio, this.fim, this.cliente.getCpf());
+        return String.format("%s;%s;%s;%s", 
+        this.data.toLinha(), this.inicio.toLinha(), this.fim.toLinha(), this.cliente.getCpf());
     }
 
-    public Reserva fromLinha(String linha) {
+    public static Reserva reservaFromLinha(String linha, Sistema s, Espaco espaco) {
         // Divide linha em Array de Strings
         String[] campos = linha.split(";");
 
         // Não é Espaco ou registro errado
-        if (campos.length != 5) {
+        if (campos.length != 4) {
             throw new IllegalArgumentException("Linha inválida para criar uma Reserva: " + linha);
         }
-        return new Reserva(campos[0], campos[1], campos[2], campos[3], campos[4]);
+        return new Reserva(
+            Data.dataFromLinha(campos[0]), Horario.horarioFromLinha(campos[1]), 
+            Horario.horarioFromLinha(campos[2]), espaco, s.getCliente(campos[3]));
     }
 
     // ================================================

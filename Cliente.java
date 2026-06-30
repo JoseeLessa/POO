@@ -28,7 +28,7 @@ public class Cliente implements Salvaveis {
         return String.format("%s;%s;%s;%s", this.nome, this.cpf, this.email, this.senha);
     }
 
-    public Cliente fromLinha(String linha) {
+    public static Cliente clienteFromLinha(String linha) {
         // Divide linha em Array de 4 Strings
         String[] campos = linha.split(";");
 

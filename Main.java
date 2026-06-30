@@ -6,7 +6,13 @@
 public class Main {
     public static void main(String[] args) {
         Entrada e = new Entrada();
-        Sistema s = e.criarSistema();
+        Sistema s;
+        try {
+            s = Persistencia.carregarTudo("arquivo.txt");
+        } catch (EntradaInvalidaExceptions ex) {
+            System.out.println(ex.getMessage());
+            s = e.criarSistema();
+        }
 
         int op = e.menu();
 
@@ -24,7 +30,13 @@ public class Main {
         }
         
         System.out.println("Finalizando o Sistema...");
-        System.out.println("Salvando para /Sistema.txt");
+
+        try {
+            Persistencia.salvarTudo(s);
+            System.out.println("Salvando para arquivo.txt");
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
 
         // Método fechar 
         e.fechar();

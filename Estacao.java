@@ -30,7 +30,7 @@ public class Estacao extends Espaco {
         return String.format("%s;%s", super.toLinha(), this.getMonitor()? "s": "n");
     }
 
-    public Estacao fromLinha(String linha){
+    public static Estacao estacaoFromLinha(String linha){
         // Divide linha em Array de Strings
         String[] campos = linha.split(";");
 

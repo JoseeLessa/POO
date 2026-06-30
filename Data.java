@@ -1,4 +1,4 @@
-public class Data implements Comparable<Data>, Validaveis{
+public class Data implements Comparable<Data>, Validaveis, Salvaveis{
     private int dia;
     private int mes;
     private int ano;
@@ -34,6 +34,25 @@ public class Data implements Comparable<Data>, Validaveis{
         if (this.dia > d2.getDia()) return 1;
         if (this.dia < d2.getDia()) return -1;
         return 0;
+    }
+
+    // ================================================
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",".
+        return String.format("%s", this.toString());
+    }
+
+    public static Data dataFromLinha(String linha){
+        // Divide linha em Array de Strings
+        String[] campos = linha.split("/");
+
+        // Não é Espaco ou registro errado
+        if (campos.length != 3) {
+            throw new IllegalArgumentException("Linha inválida para criar uma Data: " + linha);
+        }
+        return new Data(Integer.parseInt(campos[0]), Integer.parseInt(campos[1]), Integer.parseInt(campos[2]));
     }
 
     // ================================================

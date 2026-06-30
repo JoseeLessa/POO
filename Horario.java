@@ -1,4 +1,4 @@
-public class Horario implements Validaveis {
+public class Horario implements Validaveis, Salvaveis {
     private int hora;
     private int min;
 
@@ -25,6 +25,25 @@ public class Horario implements Validaveis {
         if (this.getMin() < 0 || this.getMin() > 59) throw new EntradaInvalidaExceptions("ERRO, Minuto inválido");
         if (this.getHora() == 22 && this.getMin() > 0) throw new EntradaInvalidaExceptions("ERRO, Horário inválido, horário de fechamento é 22:00");
         if (this.getHora() < 8) throw new EntradaInvalidaExceptions("ERRO, Horário inválido, horário de abertura é 8:00");
+    }
+
+    // ================================================
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",".
+        return String.format("%s", this.toString());
+    }
+
+    public static Horario horarioFromLinha(String linha) {
+        // Divide linha em Array de Strings
+        String[] campos = linha.split(":");
+
+        // Não é Espaco ou registro errado
+        if (campos.length != 2) {
+            throw new IllegalArgumentException("Linha inválida para criar um Horario: " + linha);
+        }
+        return new Horario(Integer.parseInt(campos[0]), Integer.parseInt(campos[1]));
     }
 
     // ================================================

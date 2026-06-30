@@ -1,0 +1,33 @@
+5.0;10.0;10.0;5.0
+//Clientes
+Joao;123;joao@joao.com;123
+Maria;234;maria@maria.com;234
+Pedro;345;pedro@pedro.com;345
+//FimClientes
+//Salas
+Sala Azul;s
+//Reservas
+02/02/2026;08:00;22:00;123
+03/02/2026;08:00;10:00;345
+//FimReservas
+Sala Amarela;n
+//Reservas
+02/02/2026;13:00;17:00;234
+//FimReservas
+Sala Verde;n
+//Reservas
+02/02/2026;16:00;20:00;345
+//FimReservas
+//FimSalas
+//Estacoes
+Estacao 01;s
+//Reservas
+//FimReservas
+Estacao 02;n
+//Reservas
+02/02/2026;08:00;22:00;123
+//FimReservas
+Estacao 03;s
+//Reservas
+//FimReservas
+//FimEstacoes
