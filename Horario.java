@@ -1,4 +1,4 @@
-public class Horario implements Validaveis, Salvaveis {
+public class Horario implements Validaveis, Salvaveis, Comparable<Horario> {
     private int hora;
     private int min;
 
@@ -23,8 +23,8 @@ public class Horario implements Validaveis, Salvaveis {
     public void validar() throws EntradaInvalidaExceptions {
         if (this.getHora() < 0 || this.getHora() > 23) throw new EntradaInvalidaExceptions("ERRO, Hora inválida");
         if (this.getMin() < 0 || this.getMin() > 59) throw new EntradaInvalidaExceptions("ERRO, Minuto inválido");
-        if (this.getHora() == 22 && this.getMin() > 0) throw new EntradaInvalidaExceptions("ERRO, Horário inválido, horário de fechamento é 22:00");
-        if (this.getHora() < 8) throw new EntradaInvalidaExceptions("ERRO, Horário inválido, horário de abertura é 8:00");
+        if (this.compareTo(new Horario(22,0)) > 0) throw new EntradaInvalidaExceptions("ERRO, Horário inválido, horário de fechamento é 22:00");
+        if (this.compareTo(new Horario(8, 0)) < 0) throw new EntradaInvalidaExceptions("ERRO, Horário inválido, horário de abertura é 08:00");
     }
 
     // ================================================
@@ -47,13 +47,9 @@ public class Horario implements Validaveis, Salvaveis {
     }
 
     // ================================================
-    // Outros métodos
-    /**
-     * Compara este horário com outro horário.
-     * @param h2 Horário a ser comparado.
-     * @return -1 se este horário for anterior, 0 se forem iguais, 1 se este horário for posterior.
-     */
-    public int compare(Horario h2) {
+    // Métodos implementados
+    @Override
+    public int compareTo(Horario h2) {
         if (this.hora < h2.getHora())
             return -1;
         else if (this.hora > h2.getHora())

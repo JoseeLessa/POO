@@ -48,7 +48,7 @@ public abstract class Espaco implements Salvaveis {
         if (!(this.possuiAdicionalExtra() == extra)) return false;
         for (Reserva r : this.reservas) {
             if (r.getData().equals(data)){
-                if (inicio.compare(r.getFim()) <= 0 && fim.compare(r.getInicio()) >= 0) {
+                if (inicio.compareTo(r.getFim()) <= 0 && fim.compareTo(r.getInicio()) >= 0) {
                     return false;
                 }
             } 

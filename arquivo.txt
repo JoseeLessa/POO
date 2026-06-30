@@ -3,12 +3,14 @@
 Joao;123;joao@joao.com;123
 Maria;234;maria@maria.com;234
 Pedro;345;pedro@pedro.com;345
+Jose;456;jose@jose.com;123
 //FimClientes
 //Salas
 Sala Azul;s
 //Reservas
 02/02/2026;08:00;22:00;123
 03/02/2026;08:00;10:00;345
+29/02/2024;08:00;12:00;123
 //FimReservas
 Sala Amarela;n
 //Reservas

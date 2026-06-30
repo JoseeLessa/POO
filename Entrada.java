@@ -91,10 +91,9 @@ public class Entrada {
 
     /**
      * Faz a leitura de dados para criar uma Data.
-     * @param s Objeto da classe Sistema
      * @return new Data
      */
-    public Data lerData(Sistema s) throws EntradaInvalidaExceptions {
+    public Data lerData() throws EntradaInvalidaExceptions {
         try {
             int dia = this.lerInteiro("Dia: ");
             int mes = this.lerInteiro("Mês: ");
@@ -110,11 +109,10 @@ public class Entrada {
 
     /**
      * Faz a leitura de dados para criar um Horario.
-     * @param s Objeto da classe Sistema
      * @throws EntradaInvalidaExceptions indicando entrada inválida.
      * @return new Horario
      */
-    public Horario lerHorario(Sistema s) throws EntradaInvalidaExceptions{
+    public Horario lerHorario() throws EntradaInvalidaExceptions{
         try {
             int hora = this.lerInteiro("Hora: ");
             int minutos = this.lerInteiro("Minuto: ");
@@ -129,11 +127,10 @@ public class Entrada {
 
     /**
      * Faz a leitura do tipo do espaço que o cliente desejar reservar.
-     * @param s
      * @throws EntradaInvalidaExceptions indicando entrada inválida.
      * @return String contendo 's' para sala ou 'e' para estação de trabalho
      */
-    public String lerTipo(Sistema s) throws EntradaInvalidaExceptions{
+    public String lerTipo() throws EntradaInvalidaExceptions{
         String tipo = this.lerLinha("Deseja reservar uma sala ou estação de trabalho? (s/e): ").trim().toLowerCase();
         
         if (tipo.isEmpty()) throw new EntradaInvalidaExceptions("ERRO, campo vazio.");
@@ -146,12 +143,11 @@ public class Entrada {
     /**
      * Faz a leitura se o cliente quer uma reseva com extra. 
      * Não há Texto para o tipo da sala, apenas as opções.
-     * @param s Objeto da classe Sistema
      * @throws EntradaInvalidaExceptions indicando entrada inválida.
      * @return booleano contendo a resposta
      */
-    public boolean lerExtra(Sistema s) throws EntradaInvalidaExceptions {
-        
+    public boolean lerExtra() throws EntradaInvalidaExceptions {
+        // Remoção de espaços e deixa minúsculo
         String extra = this.lerLinha("(s/n): ").trim().toLowerCase();
 
         if (extra.isEmpty()) throw new EntradaInvalidaExceptions("ERRO, campo vazio.");
@@ -162,15 +158,45 @@ public class Entrada {
     }
 
     /**
+     * Faz a leitura se o cliente quer uma reseva com extra. 
+     * Não há Texto para o tipo da sala, apenas as opções.
+     * @throws EntradaInvalidaExceptions indicando entrada inválida.
+     * @return booleano contendo a resposta
+     */
+    public String lerCPF() throws EntradaInvalidaExceptions {
+        // Remoção de espaços
+        String cpf = this.lerLinha("Digite o CPF do cliente: ").trim();
+
+        if (cpf.isEmpty()) throw new EntradaInvalidaExceptions("ERRO, campo vazio.");
+
+        // Verifica se cpf possui apenas número. Poderia ser implementada uma validação aqui.
+        if (!cpf.matches("\\d+")) throw new EntradaInvalidaExceptions("ERRO, CPF Inválido");
+
+        return cpf;
+    }
+
+    /**
      * Faz a leitura de um cpf e retorna o cliente com aquele CPF.
      * @param s Objeto da classe Sistema
      * @return objeto da classe Cliente referente ao CPF digitado
      */
-    public Cliente lerCliente(Sistema s) {
+    public Cliente lerCliente(Sistema s) throws EntradaInvalidaExceptions {
         this.listarClientes(s);
-        String cpf = this.lerLinha("Digite o CPF do cliente: ");
-        
-        return s.getCliente(cpf);
+        try {
+            // Remoção de espaços
+            String cpf = this.lerCPF();
+
+            if (cpf.isEmpty()) throw new EntradaInvalidaExceptions("ERRO, campo vazio.");
+
+            // Verifica se cpf possui apenas número. Poderia ser implementada uma validação aqui.
+            if (!cpf.matches("\\d+")) throw new EntradaInvalidaExceptions("ERRO, CPF Inválido.");
+
+            Cliente c = s.getCliente(cpf);
+            if (c==null) throw new EntradaInvalidaExceptions("ERRO, Cliente não encontrado.");
+            return c;
+        } catch (EntradaInvalidaExceptions e) {
+            throw new EntradaInvalidaExceptions(e.getMessage());
+        }
     }
 
     /**
@@ -441,7 +467,7 @@ public class Entrada {
         Data data;
         
         try {
-            data = this.lerData(s);
+            data = this.lerData();
 
             ArrayList<Reserva> reservas = s.getReservas(data);
             Collections.sort(reservas);
@@ -464,18 +490,23 @@ public class Entrada {
      * @param s: Objeto da classe Sistema
      */
     public void listarReservasCliente(Sistema s) {
-        Cliente cli = this.lerCliente(s);
-        ArrayList<Reserva> reservas = s.getReservas(cli);
-        Collections.sort(reservas);
-        
-        if (reservas.isEmpty()) {
-            System.out.println("Nenhuma reserva feita.");
-        } else {
-            System.out.println("Reservas cadastradas para este cliente:");
-            for (Reserva r : reservas) {
-                System.out.println(r);
+        try {
+            Cliente cli = this.lerCliente(s);
+            ArrayList<Reserva> reservas = s.getReservas(cli);
+            Collections.sort(reservas);
+            
+            if (reservas.isEmpty()) {
+                System.out.println("Nenhuma reserva feita.");
+            } else {
+                System.out.println("Reservas cadastradas para este cliente:");
+                for (Reserva r : reservas) {
+                    System.out.println(r);
+                }
             }
+        } catch(EntradaInvalidaExceptions e ) {
+            System.out.println(e.getMessage());
         }
+        
     }
 
     // ================================================
@@ -487,18 +518,23 @@ public class Entrada {
     public void cadastrarCliente(Sistema s) {
         this.listarClientes(s);
 
-        System.out.println("Cadastrando cliente.");
-        String nome = this.lerLinha("Digite o nome do cliente: ");
-        String cpf = this.lerLinha("Digite o CPF do cliente: ");
-        String email = this.lerLinha("Digite o email do cliente: ");
-        String senha = this.lerLinha("Digite a senha do cliente: ");
+        try {
+            System.out.println("Cadastrando cliente.");
+            String nome = this.lerLinha("Digite o nome do cliente: ");
+            String cpf = this.lerCPF();
+            String email = this.lerLinha("Digite o email do cliente: ");
+            String senha = this.lerLinha("Digite a senha do cliente: ");
 
-        if (s.getCliente(cpf) == null) {
-            Cliente cli = new Cliente(nome, cpf, email, senha);
-            s.cadastrar(cli);
-        } else {
-            System.out.println("CPF já cadastrado. Cliente não inserido.");
-        } 
+            if (s.getCliente(cpf) == null) {
+                Cliente cli = new Cliente(nome, cpf, email, senha);
+                s.cadastrar(cli);
+            } else {
+                System.out.println("CPF já cadastrado. Cliente não inserido.");
+            } 
+        } catch(EntradaInvalidaExceptions e) {
+            System.out.println(e.getMessage());
+        }
+        
     }
 
     /**
@@ -512,7 +548,7 @@ public class Entrada {
             System.out.println("Cadastrando sala.");
             String desc = this.lerLinha("Digite o nome da sala: ");
             System.out.print("Possui projetor?");
-            boolean extra = this.lerExtra(s);
+            boolean extra = this.lerExtra();
 
             if (s.getSala(desc) == null) {
                 Sala sala = new Sala(desc, extra);
@@ -536,7 +572,7 @@ public class Entrada {
             System.out.println("Cadastrando estação.");
             String desc = this.lerLinha("Digite o nome da estação: ");
             System.out.print("Possui monitor extra?");
-            boolean extra = this.lerExtra(s);
+            boolean extra = this.lerExtra();
 
             if (s.getEstacao(desc) == null) {
                 Estacao estacao = new Estacao(desc, extra);
@@ -557,24 +593,20 @@ public class Entrada {
      */
     public void reservarData(Sistema s) {
         try {
-            String tipo = this.lerTipo(s);
+            String tipo = this.lerTipo();
             if (tipo.equals("s")) {
                 System.out.print("Deseja reservar sala com projetor?");
             } else {
                 System.out.print("Deseja reservar estação com monitor extra?");
             }
-            boolean extra = this.lerExtra(s);
-            Data data = this.lerData(s);
+            boolean extra = this.lerExtra();
+            Data data = this.lerData();
             Cliente cliente = this.lerCliente(s);
 
-            if (cliente != null) {
-                if (s.reservar(tipo, data, cliente, extra)) {
-                    System.out.println("Reserva realizada com sucesso!");
-                } else {
-                    System.out.println("Não foi possível realizar a reserva. Tente novamente em outra data.");
-                }
+            if (s.reservar(tipo, data, cliente, extra)) {
+                System.out.println("Reserva realizada com sucesso!");
             } else {
-                System.out.println("Cliente não encontrado. Tente novamente.");
+                System.out.println("Não foi possível realizar a reserva. Tente novamente em outra data.");
             }
         } catch (EntradaInvalidaExceptions e) {
             System.out.println(e.getMessage());
@@ -587,25 +619,21 @@ public class Entrada {
      */
     public void reservarTurno(Sistema s) {
         try {
-            String tipo = this.lerTipo(s);
+            String tipo = this.lerTipo();
             if (tipo.equals("s")) {
                 System.out.print("Deseja reservar sala com projetor?");
             } else {
                 System.out.print("Deseja reservar estação com monitor extra?");
             }
-            boolean extra = this.lerExtra(s);
-            Data data = this.lerData(s);
+            boolean extra = this.lerExtra();
+            Data data = this.lerData();
             String turno = this.lerTurno(s);
             Cliente cliente = this.lerCliente(s);
 
-            if (cliente != null) {
-                if (s.reservar(tipo, data, turno, cliente, extra)) {
-                    System.out.println("Reserva realizada com sucesso!");
-                } else {
-                    System.out.println("Não foi possível realizar a reserva. Tente novamente em outra data ou turno.");
-                }
+            if (s.reservar(tipo, data, turno, cliente, extra)) {
+                System.out.println("Reserva realizada com sucesso!");
             } else {
-                System.out.println("Cliente não encontrado. Tente novamente.");
+                System.out.println("Não foi possível realizar a reserva. Tente novamente em outra data ou turno.");
             }
         } catch (EntradaInvalidaExceptions e) {
             System.out.println(e.getMessage());
@@ -618,31 +646,31 @@ public class Entrada {
      */
     public void reservarHorario(Sistema s) {
         try {
-            String tipo = this.lerTipo(s);
+            String tipo = this.lerTipo();
             if (tipo.equals("s")) {
                 System.out.print("Deseja reservar sala com projetor?");
             } else {
                 System.out.print("Deseja reservar estação com monitor extra?");
             }
 
-            boolean extra = this.lerExtra(s);
+            boolean extra = this.lerExtra();
+
+            Data data = this.lerData();
 
             System.out.println("Escolha o horário de início da reserva:");
-            Data data = this.lerData(s);
-            Horario inicio = this.lerHorario(s);
+            Horario inicio = this.lerHorario();
+
             System.out.println("Escolha o horário de fim da reserva:");
-            Horario fim = this.lerHorario(s);
+            Horario fim = this.lerHorario();
+
+            if (inicio.compareTo(fim) > 0) throw new EntradaInvalidaExceptions("Erro Horário de Início maior que o Final.");
 
             Cliente cliente = this.lerCliente(s);
 
-            if (cliente != null) {
-                if (s.reservar(tipo, data, inicio, fim, cliente, extra)) {
-                    System.out.println("Reserva realizada com sucesso!");
-                } else {
-                    System.out.println("Não foi possível realizar a reserva. Tente novamente em outro horário ou data.");
-                }
+            if (s.reservar(tipo, data, inicio, fim, cliente, extra)) {
+                System.out.println("Reserva realizada com sucesso!");
             } else {
-                System.out.println("Cliente não encontrado. Tente novamente.");
+                System.out.println("Não foi possível realizar a reserva. Tente novamente em outro horário ou data.");
             }
         } catch (EntradaInvalidaExceptions e) {
             System.out.println(e.getMessage());

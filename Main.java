@@ -7,8 +7,11 @@ public class Main {
     public static void main(String[] args) {
         Entrada e = new Entrada();
         Sistema s;
+
+        // Caminho de arquivo do sistema. (padrão: arquivo.txt)
+        String path = "arquivo.txt";
         try {
-            s = Persistencia.carregarTudo("arquivo.txt");
+            s = Persistencia.carregarTudo(path);
         } catch (EntradaInvalidaExceptions ex) {
             System.out.println(ex.getMessage());
             s = e.criarSistema();
@@ -33,8 +36,8 @@ public class Main {
 
         try {
             Persistencia.salvarTudo(s);
-            System.out.println("Salvando para arquivo.txt");
-        } catch (Exception ex) {
+            System.out.println("Salvando para " + path);
+        } catch (EntradaInvalidaExceptions ex) {
             System.out.println(ex.getMessage());
         }
 

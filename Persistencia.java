@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -47,6 +48,7 @@ public class Persistencia {
                         
                         // Cabeçalho de Reservas
                         if ((linha = reader.readLine()).startsWith("//Reservas")) {
+                            // Registra Reservas da Sala
                             while (!(linha = reader.readLine()).startsWith("//FimReservas")) {
                                 Reserva r = Reserva.reservaFromLinha(linha, sys, s);
                                 s.addReserva(r);
@@ -70,7 +72,7 @@ public class Persistencia {
                         
                         // Cabeçalho de Reservas
                         if ((linha = reader.readLine()).startsWith("//Reservas")) {
-                            // Registra Reservas da Sala
+                            // Registra Reservas da Estacao
                             while (!(linha = reader.readLine()).startsWith("//FimReservas")) { 
                                 Reserva r = Reserva.reservaFromLinha(linha, sys, e);
                                 e.addReserva(r);
@@ -80,14 +82,17 @@ public class Persistencia {
                 }
             }
             reader.close();
-        } catch (Exception e) {
-            throw new EntradaInvalidaExceptions("Erro ao carregar arquivo: " + arquivo + e.getMessage());
+        } catch (IOException e) {
+            throw new EntradaInvalidaExceptions("Erro ao carregar, arquivo " + arquivo + " não encontrado");
+        } catch (EntradaInvalidaExceptions ei ) {
+            throw new EntradaInvalidaExceptions("Erro ao carregar arquivo, formato inválido");
         }
         return sys;
     }
 
     /**
-     * 
+     * Salva todos os dados salvos no Sistema.
+     * Foi descidido reescrita de arquivo por conta da forma como as reservas estão guardadas.
      * @param sys
      * @throws EntradaInvalidaExceptions
      */
@@ -103,6 +108,7 @@ public class Persistencia {
             ArrayList<Espaco> estacoes = sys.getEstacoes();
             HashMap<String, Cliente> clientes = sys.getClientes();
 
+            // Escrita dos clientes
             if (!clientes.isEmpty()) {
                 buff.write("//Clientes");
                 buff.newLine();
@@ -116,6 +122,7 @@ public class Persistencia {
                 buff.newLine();
             }
 
+            // Escrita das Salas
             if (!salas.isEmpty()) {
                 buff.write("//Salas");
                 buff.newLine();
@@ -141,6 +148,7 @@ public class Persistencia {
                 buff.newLine();
             }
 
+            // Escrita das estações
             if (!estacoes.isEmpty()) {
                 buff.write("//Estacoes");
                 buff.newLine();
@@ -167,8 +175,8 @@ public class Persistencia {
             }
             buff.close();
             f.close();
-        } catch (Exception e) {
-            throw new EntradaInvalidaExceptions("Erro ao salvar arquivo." );
+        } catch (IOException io) {
+            throw new EntradaInvalidaExceptions("Erro ao salvar arquivo. Abortando..." );
         }
     }
 }
