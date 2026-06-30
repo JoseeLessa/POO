@@ -13,6 +13,33 @@ public class Sala extends Espaco {
         super(descricao);
         this.projetor = projetor;
     }
+    
+    // ===============================================
+    // Métodos abstratos herdados
+    
+    @Override
+    public boolean possuiAdicionalExtra() {
+        return this.projetor;
+    }
+
+    // ================================================
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",".
+        return String.format("%s;%s", super.toLinha(), this.getProjetor()? "s": "n");
+    }
+
+    public static Sala salaFromLinha(String linha){
+        // Divide linha em Array de Strings
+        String[] campos = linha.split(";");
+
+        // Não é Espaco ou registro errado
+        if (campos.length != 2) {
+            throw new IllegalArgumentException("Linha inválida para criar uma Sala: " + linha);
+        }
+        return new Sala(campos[0], campos[1].equals("s"));
+    }
 
     // ================================================
     // Outros métodos
@@ -22,10 +49,6 @@ public class Sala extends Espaco {
         return 4*super.preco(inicio, fim) + (this.possuiAdicionalExtra() ? getPrecoProjetor() : 0);
     }
 
-    @Override
-    public boolean possuiAdicionalExtra() {
-        return super.possuiAdicionalExtra() && this.projetor;
-    }
 
     // ================================================
     // Getters e setters
@@ -66,6 +89,6 @@ public class Sala extends Espaco {
     // toString
     @Override
     public String toString() {
-        return String.format("%s (Sala %s Projetor)", super.toString(), this.possuiAdicionalExtra() ? "com":"sem");
+        return String.format("%s (Sala %s Projetor)", super.getDescricao(), this.possuiAdicionalExtra() ? "com":"sem");
     }
 }

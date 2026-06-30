@@ -1,4 +1,4 @@
-public class Reserva {
+public class Reserva implements Comparable<Reserva>, Salvaveis{
     private Data data;
     private Horario inicio;
     private Horario fim;
@@ -24,6 +24,46 @@ public class Reserva {
         this.cliente = cliente;
     }
     
+    // ================================================
+    // Métodos implementados
+    @Override
+    public int compareTo(Reserva r2) {
+        // Alfabeticamente, pelo nome do cliente
+        if (this.getCliente().getNome().compareTo(r2.getCliente().getNome()) > 0) return 1;
+        if (this.getCliente().getNome().compareTo(r2.getCliente().getNome()) < 0) return -1;
+
+        // Pelo maior preço
+        if (this.preco() > r2.preco()) return -1;
+        if (this.preco() < r2.preco()) return 1;
+
+        // Por data mais recente
+        if (this.getData().compareTo(r2.getData()) > 0) return -1;
+        if (this.getData().compareTo(r2.getData()) < 0) return 1;
+        return 0;
+    }
+
+    // ================================================
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",".
+        return String.format("%s;%s;%s;%s", 
+        this.data.toLinha(), this.inicio.toLinha(), this.fim.toLinha(), this.cliente.getCpf());
+    }
+
+    public static Reserva reservaFromLinha(String linha, Sistema s, Espaco espaco) {
+        // Divide linha em Array de Strings
+        String[] campos = linha.split(";");
+
+        // Não é Espaco ou registro errado
+        if (campos.length != 4) {
+            throw new IllegalArgumentException("Linha inválida para criar uma Reserva: " + linha);
+        }
+        return new Reserva(
+            Data.dataFromLinha(campos[0]), Horario.horarioFromLinha(campos[1]), 
+            Horario.horarioFromLinha(campos[2]), espaco, s.getCliente(campos[3]));
+    }
+
     // ================================================
     // Outros métodos
     /**
@@ -131,7 +171,7 @@ public class Reserva {
         return ("Reserva:\n" +
                 "* Local: " + this.espaco + "\n" +
                 "* Data: " + this.data + "\n" +
-                "* Horário: " + this.inicio + "\n" +
+                "* Horário: " + this.inicio + " - " + this.fim + "\n" +
                 "* Cliente: " + this.cliente + "\n" +
                 "* Valor: R$ " + this.printPreco());
     }

@@ -1,15 +1,16 @@
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class Sistema {
-    private ArrayList<Cliente> clientes;
+public class Sistema implements Salvaveis {
+    private HashMap<String, Cliente> clientes;
     private ArrayList<Espaco> estacoes;
     private ArrayList<Espaco> salas;
 
     // ================================================
     // Construtor
     public Sistema(double valorHora, double taxaLimpeza, double precoProjetor, double precoMonitor) {
-        this.clientes = new ArrayList<Cliente>();
+        this.clientes = new HashMap<String, Cliente>();
         this.estacoes = new ArrayList<Espaco>();
         this.salas = new ArrayList<Espaco>();
 
@@ -21,6 +22,29 @@ public class Sistema {
         Sala.setPrecoProjetor(precoProjetor);
         // salvar as informacoes sobre o preco do monitor extra
         Estacao.setPrecoMonitor(precoMonitor);
+    }
+
+    // ================================================
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",".
+        return String.format("%s;%s;%s;%s", String.valueOf(Espaco.getValorHora()), String.valueOf(Espaco.getTaxaLimpeza()), String.valueOf(Sala.getPrecoProjetor()), String.valueOf(Estacao.getPrecoMonitor()));
+    }
+
+    public static Sistema sistemaFromLinha(String linha) throws EntradaInvalidaExceptions {
+        try {
+            // Divide linha em Array de Strings
+            String[] campos = linha.split(";");
+
+            // Não é Sistema ou registro errado
+            if (campos.length != 4) {
+                throw new IllegalArgumentException("Linha inválida para criar um Sistema: " + linha);
+            }
+            return new Sistema(Double.parseDouble(campos[0]), Double.parseDouble(campos[1]), Double.parseDouble(campos[2]), Double.parseDouble(campos[3]));
+        } catch (Exception e) {
+            throw new EntradaInvalidaExceptions("Erro ao fazer leitura de Sistema.");
+        }
     }
 
     // ================================================
@@ -134,10 +158,7 @@ public class Sistema {
      * @return retorna o cliente caso ache, ou null caso não ache nenhum cliente
      */
     public Cliente getCliente(String cpf) {
-        for (Cliente c : this.clientes) {
-            if (c.getCpf().equals(cpf)) return c;
-        }
-        return null;
+        return clientes.get(cpf);
     }
 
     /**
@@ -209,7 +230,7 @@ public class Sistema {
      * Retorna a lista de todas as estações cadastradas no sistema.
      * @return ArrayList de Estação contendo todas as Estações no sistema
      */
-    public ArrayList<Cliente> getClientes() {
+    public HashMap<String, Cliente> getClientes() {
         return this.clientes;
     }
 
@@ -218,7 +239,7 @@ public class Sistema {
      * @param cliente cliente a ser adicionado
      */
     public void cadastrar(Cliente cliente) {
-        this.clientes.add(cliente);
+        this.clientes.put(cliente.getCpf(), cliente);
     }
     
     /**

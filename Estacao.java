@@ -14,6 +14,33 @@ public class Estacao extends Espaco {
         this.monitorExtra = monitorExtra;
     }
 
+    // ===============================================
+    // Métodos abstratos herdados
+    
+    @Override
+    public boolean possuiAdicionalExtra() {
+        return this.monitorExtra;
+    }
+
+    // ================================================
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",".
+        return String.format("%s;%s", super.toLinha(), this.getMonitor()? "s": "n");
+    }
+
+    public static Estacao estacaoFromLinha(String linha){
+        // Divide linha em Array de Strings
+        String[] campos = linha.split(";");
+
+        // Não é Espaco ou registro errado
+        if (campos.length != 2) {
+            throw new IllegalArgumentException("Linha inválida para criar uma Estacao: " + linha);
+        }
+        return new Estacao(campos[0], campos[1].equals("s"));
+    }
+
     // ================================================
     // Outros métodos
     
@@ -22,10 +49,6 @@ public class Estacao extends Espaco {
         return super.preco(inicio, fim) + (this.possuiAdicionalExtra() ? getPrecoMonitor() : 0);
     }
 
-    @Override
-    public boolean possuiAdicionalExtra() {
-        return super.possuiAdicionalExtra() && this.monitorExtra;
-    }
 
     // ================================================
     // Getters e setters

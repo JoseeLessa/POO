@@ -1,10 +1,10 @@
-public class Cliente {
+public class Cliente implements Salvaveis {
     private String nome;
     private String cpf;
     private String email;
     private String senha;
 
-    // ================================================
+    // ================================================e
     // Construtor
     /**
      * Construtor da classe Usuários, que recebe o nome, cpf, email e a senha a serem cadastradas.
@@ -14,14 +14,30 @@ public class Cliente {
      * @param senha String com senha do usuário a ser cadastrado
      */
     public Cliente(String nome, String cpf, String email, String senha) {
-        this.setNome(nome);
-        this.setCpf(cpf);
-        this.setEmail(email);
-        this.setSenha(senha);
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+        this.senha = senha;
     }
 
     // ================================================
-    // Outros métodos
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",". 
+        return String.format("%s;%s;%s;%s", this.nome, this.cpf, this.email, this.senha);
+    }
+
+    public static Cliente clienteFromLinha(String linha) {
+        // Divide linha em Array de 4 Strings
+        String[] campos = linha.split(";");
+
+        // Não é Cliente ou registro errado
+        if (campos.length != 4) {
+            throw new IllegalArgumentException("Linha inválida para criar um Cliente: " + linha);
+        }
+        return new Cliente(campos[0], campos[1], campos[2], campos[3]);
+    }
 
     // ================================================
     // Getters e setters

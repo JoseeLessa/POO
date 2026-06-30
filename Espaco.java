@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Espaco {
+public abstract class Espaco implements Salvaveis {
     protected String descricao;
     static protected double valorHora;
     static protected double taxaLimpeza;
@@ -17,6 +17,23 @@ public class Espaco {
         this.reservas = new ArrayList<>();
     }
 
+    // ================================================
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",".
+        return String.format("%s", this.descricao);
+    }
+
+    // ===============================================
+    // Métodos abstratos
+    
+    /**
+     * Verifica se o espaço possui adicional extra (projetor ou monitor).
+     * @return Boolean indicando se o espaço possui ou não adicional extra
+     */
+    public abstract boolean possuiAdicionalExtra();
+
     // ===============================================
     // Outros métodos
     /**
@@ -28,10 +45,13 @@ public class Espaco {
      * @return Boolean indicando se o espaço está disponível ou não para reserva
      */
     public boolean disponivel(Data data, Horario inicio, Horario fim, boolean extra){
-        for (Reserva r : reservas) {
-            if (r.getData().equals(data) && this.possuiAdicionalExtra()==extra && inicio.compare(r.getFim()) >= 0 && fim.compare(r.getInicio()) <=0) {
-                return false;
-            }
+        if (!(this.possuiAdicionalExtra() == extra)) return false;
+        for (Reserva r : this.reservas) {
+            if (r.getData().equals(data)){
+                if (inicio.compareTo(r.getFim()) <= 0 && fim.compareTo(r.getInicio()) >= 0) {
+                    return false;
+                }
+            } 
         }
         return true;
     }
@@ -55,14 +75,6 @@ public class Espaco {
         // a mesma ou, ex: (18h até 19h 20min -> 2 horas cobradas).
         // Deve ter jeito melhor de fazer, mas é o que encaixa na regra do negócio.
         return getValorHora() * (fim.getHora() - inicio.getHora() + (fim.getMin() > 0 ? 1 : 0)) + getTaxaLimpeza();
-    }
-
-    /**
-     * Verifica se o espaço possui adicional extra (projetor ou monitor).
-     * @return Boolean indicando se o espaço possui ou não adicional extra
-     */
-    public boolean possuiAdicionalExtra() {
-        return true;
     }
 
     // ================================================
@@ -124,7 +136,5 @@ public class Espaco {
     // ================================================
     // toString
     @Override
-    public String toString() {
-        return this.getDescricao();
-    }
+    public abstract String toString();
 }

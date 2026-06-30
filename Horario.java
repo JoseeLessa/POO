@@ -1,4 +1,4 @@
-public class Horario {
+public class Horario implements Validaveis, Salvaveis, Comparable<Horario> {
     private int hora;
     private int min;
 
@@ -10,18 +10,46 @@ public class Horario {
      * @param min Minutos do horário
      */
     public Horario(int hora, int min) {
-        this.setHora(hora);
-        this.setMin(min);
+        this.hora = hora;
+        this.min = min;
+    }
+    // ================================================
+    // Excessões
+    /**
+     * Verifica se o horário é válido, caso não seja, lança uma exceção.
+     * @throws EntradaInvalidaExceptions Caso o horário seja inválido
+     */
+    @Override
+    public void validar() throws EntradaInvalidaExceptions {
+        if (this.getHora() < 0 || this.getHora() > 23) throw new EntradaInvalidaExceptions("ERRO, Hora inválida");
+        if (this.getMin() < 0 || this.getMin() > 59) throw new EntradaInvalidaExceptions("ERRO, Minuto inválido");
+        if (this.compareTo(new Horario(22,0)) > 0) throw new EntradaInvalidaExceptions("ERRO, Horário inválido, horário de fechamento é 22:00");
+        if (this.compareTo(new Horario(8, 0)) < 0) throw new EntradaInvalidaExceptions("ERRO, Horário inválido, horário de abertura é 08:00");
     }
 
     // ================================================
-    // Outros métodos
-    /**
-     * Compara este horário com outro horário.
-     * @param h2 Horário a ser comparado.
-     * @return -1 se este horário for anterior, 0 se forem iguais, 1 se este horário for posterior.
-     */
-    public int compare(Horario h2) {
+    // métodos Salvaveis
+    @Override
+    public String toLinha() {
+        // Padrão CSV para dados com ",".
+        return String.format("%s", this.toString());
+    }
+
+    public static Horario horarioFromLinha(String linha) {
+        // Divide linha em Array de Strings
+        String[] campos = linha.split(":");
+
+        // Não é Espaco ou registro errado
+        if (campos.length != 2) {
+            throw new IllegalArgumentException("Linha inválida para criar um Horario: " + linha);
+        }
+        return new Horario(Integer.parseInt(campos[0]), Integer.parseInt(campos[1]));
+    }
+
+    // ================================================
+    // Métodos implementados
+    @Override
+    public int compareTo(Horario h2) {
         if (this.hora < h2.getHora())
             return -1;
         else if (this.hora > h2.getHora())
